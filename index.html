@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>나는 어떻게 만들어졌을까?</title>
+<style>
+:root{
+  --bg:#FBF6EC;--ink:#3D3229;--sub:#7A6D61;--card:#FFFFFF;--line:#E8DFD0;
+  --accent:#E07A5F;--accent-d:#C3624A;
+  --blue:#4A8FD9;--blue-l:#E4F0FC;--yellow:#E0A820;--yellow-l:#FFF3D1;
+  --purple:#7A55C0;--purple-l:#EDE5FA;--lpurple:#B9A3E3;--lpurple-l:#F8F4FE;
+  --green:#4FA866;--green-l:#E2F4E6;
+  --coral:#EE8866;--coral-l:#FDE9E1;--gray:#A89C8E;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR","Noto Sans CJK KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  -webkit-tap-highlight-color:transparent}
+#app{max-width:1080px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:0 16px}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:14px 0 6px;gap:12px;flex-wrap:wrap}
+.brand{font-weight:800;font-size:18px}
+.hright{display:flex;align-items:center;gap:12px}
+.progress{display:flex;gap:5px}
+.progress span{width:18px;height:6px;border-radius:3px;background:var(--line);transition:background .3s}
+.progress span.done{background:#EDB9A9}
+.progress span.on{background:var(--accent)}
+.badge{background:var(--yellow-l);color:#8A6400;border-radius:999px;padding:5px 12px;font-weight:800;font-size:14px}
+main{flex:1;display:flex;flex-direction:column;padding-top:6px}
+main.enter{animation:fadeUp .45s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{to{opacity:1}}
+.rise{opacity:0;animation:fadeUp .5s ease forwards}
+h1.q{font-size:28px;margin:10px 0 6px;line-height:1.35}
+.center{text-align:center}
+p.hint{color:var(--sub);margin:0 0 18px;font-size:17px;line-height:1.5}
+.btn{border:none;border-radius:999px;padding:13px 26px;font-size:18px;font-weight:800;cursor:pointer;min-height:52px;font-family:inherit;transition:transform .15s, filter .15s}
+.btn.primary{background:var(--accent);color:#fff;box-shadow:0 4px 0 var(--accent-d)}
+.btn.primary:active{transform:translateY(2px);box-shadow:0 2px 0 var(--accent-d)}
+.btn.primary:disabled{background:#D9CFC2;box-shadow:0 4px 0 #C4B8A9;cursor:default;transform:none;filter:none}
+.btn.ghost{background:transparent;color:var(--sub);border:2px solid var(--line)}
+.btn.soft{background:#fff;color:var(--ink);border:2px solid var(--line)}
+.btn.soft:active,.btn.ghost:active{transform:translateY(2px)}
+.btn.big{font-size:22px;padding:16px 40px}
+.btn.small{min-height:48px;padding:10px 20px;font-size:16px}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:20px 0 26px;margin-top:auto;gap:12px;flex-wrap:wrap}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:16px;background:#fff;
+  border:2px solid var(--line);font-size:17px;cursor:pointer;min-height:52px;font-family:inherit;color:var(--ink);text-align:left;line-height:1.35;transition:transform .15s, box-shadow .15s}
+.chip .em{font-size:24px}
+.chip.sel{border-color:var(--accent);background:var(--coral-l);font-weight:800}
+.chip.sel-y{border-color:var(--yellow);background:var(--yellow-l);font-weight:800}
+.chip.sel-g{border-color:var(--green);background:var(--green-l);font-weight:800}
+.chip.sel-a{border-color:var(--gray);background:#F4EFE7;font-weight:800;border-style:dashed}
+.chip:disabled{opacity:.45;cursor:default}
+.justsel{animation:selpop .32s ease}
+@keyframes selpop{0%{transform:scale(.95)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+@media (hover:hover){
+  .chip:not(:disabled):hover,.x-card:not(:disabled):hover,.dom-tile:hover,.opt:hover,.tab:hover{transform:translateY(-2px);box-shadow:0 5px 12px rgba(80,60,40,.10)}
+  .btn.primary:not(:disabled):hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .btn.soft:hover,.btn.ghost:hover{transform:translateY(-1px)}
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tab{padding:10px 16px;border-radius:999px;border:2px solid var(--line);background:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--sub);min-height:46px;transition:transform .15s}
+.tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.custom{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.custom input,.mine input{flex:1;min-width:200px;font-size:18px;padding:12px 16px;border-radius:14px;border:2px solid var(--line);font-family:inherit;min-height:52px;background:#fff;color:var(--ink)}
+.custom input:focus,.mine input:focus{outline:none;border-color:var(--accent)}
+.tray{margin-top:18px;background:#fff;border:2px dashed var(--line);border-radius:18px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;min-height:70px}
+.tray b{color:var(--sub);margin-right:6px}
+.tag{display:inline-flex;align-items:center;gap:6px;background:var(--coral-l);border:2px solid var(--coral);border-radius:999px;padding:6px 8px 6px 14px;font-weight:700;animation:selpop .3s ease}
+.tag button{border:none;background:#fff;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;color:var(--sub)}
+
+/* domains & cards */
+.domains{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.dom-tile{background:#fff;border:3px solid var(--line);border-radius:20px;padding:18px 12px;text-align:center;cursor:pointer;font-family:inherit;color:var(--ink);transition:transform .15s, box-shadow .15s;position:relative}
+.dom-tile .e{font-size:44px;display:block}
+.dom-tile .n{font-size:20px;font-weight:800;display:block;margin-top:6px}
+.dom-tile .d{font-size:14px;color:var(--sub);display:block;margin-top:4px}
+.dom-tile .again{position:absolute;top:8px;right:8px;background:var(--blue-l);color:#23609F;font-size:12px;font-weight:800;border-radius:999px;padding:2px 8px}
+.dom-tile.sel{border-color:var(--blue);background:var(--blue-l)}
+.sec-title{font-size:18px;font-weight:800;margin:24px 0 10px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.x-card{background:#fff;border:3px solid var(--line);border-radius:18px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink);display:flex;gap:12px;align-items:flex-start;transition:transform .15s, box-shadow .15s}
+.x-card .e{font-size:36px}
+.x-card .t{font-weight:800;font-size:18px;display:block}
+.x-card .d{color:var(--sub);font-size:15px;display:block;margin-top:4px;line-height:1.4}
+.x-card.sel{border-color:var(--yellow);background:var(--yellow-l)}
+.x-card:disabled{opacity:.45;cursor:default}
+@media (max-width:760px){.domains{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr}}
+
+/* pills */
+.pill{display:inline-flex;gap:6px;align-items:center;border-radius:999px;padding:6px 14px;font-weight:800;font-size:15px;border:2px solid}
+.pill.blue{background:var(--blue-l);border-color:var(--blue);color:#23609F}
+.pill.yellow{background:var(--yellow-l);border-color:var(--yellow);color:#8A6400}
+.pill.purple{background:var(--purple-l);border-color:var(--purple);color:#4F3391}
+.pill.lpurple{background:var(--lpurple-l);border-color:var(--lpurple);color:#6A55A0}
+.pill.green{background:var(--green-l);border-color:var(--green);color:#2D7442}
+.pill.gray{background:#F4EFE7;border-color:var(--gray);color:var(--sub);border-style:dashed}
+.mini-chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:18px}
+.mini-chain .arr{color:var(--gray);font-weight:800}
+
+/* situation */
+.sentence{background:#fff;border-radius:20px;padding:20px 24px;font-size:24px;line-height:1.9;border:2px solid var(--line)}
+.blank{display:inline-block;min-width:80px;border-bottom:3px solid var(--yellow);color:#9A7300;padding:0 6px;font-weight:800;text-align:center}
+.blank.empty{color:#CDBFAC}
+.slot{margin-top:18px}
+.slot h3{font-size:17px;color:var(--sub);margin:0 0 8px}
+.slot .row{display:flex;flex-wrap:wrap;gap:10px}
+
+/* thought screen: 거울 / 화면 / 경험 카드 */
+.mirror-wrap{display:flex;gap:30px;align-items:center;flex-wrap:wrap;justify-content:center}
+.mirror-col{display:flex;flex-direction:column;align-items:center;gap:10px}
+.label-dark{font-weight:800;color:#4F3391;background:var(--purple-l);border:2px solid var(--purple);border-radius:999px;padding:5px 14px;font-size:15px}
+.label-light{font-weight:800;color:#6A55A0;background:var(--lpurple-l);border:2px solid var(--lpurple);border-radius:999px;padding:5px 14px;font-size:15px}
+.mirror{width:240px;height:300px;border-radius:120px 120px 26px 26px;background:linear-gradient(160deg,#F3F8FC,#D3E1EE);
+  border:12px solid #C9A77C;box-shadow:inset 0 0 30px rgba(255,255,255,.95),0 10px 22px rgba(0,0,0,.12);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;font-size:21px;font-weight:800;position:relative;overflow:hidden;line-height:1.45}
+.mirror::after,.screenbox::after{content:"";position:absolute;top:-30%;left:-60%;width:40%;height:160%;background:rgba(255,255,255,.55);transform:rotate(25deg);animation:shine 3.5s ease-in-out infinite}
+.screenbox::after{background:rgba(255,255,255,.12)}
+@keyframes shine{0%{left:-60%}60%,100%{left:130%}}
+.mirror .m-top,.screenbox .m-top,.expbox .m-top{font-size:40px;margin-bottom:8px}
+.mirror .m-who,.screenbox .m-who{font-size:15px;color:var(--sub);font-weight:700;margin-top:10px}
+.screenbox{width:280px;height:220px;border-radius:22px;background:linear-gradient(160deg,#39425E,#232A3E);border:12px solid #4B4B5A;color:#fff;
+  box-shadow:0 10px 22px rgba(0,0,0,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;font-size:20px;font-weight:800;position:relative;overflow:hidden;line-height:1.45}
+.screenbox .m-who{color:#C9CFE0}
+.expbox{width:260px;min-height:220px;border-radius:22px;background:var(--yellow-l);border:4px solid var(--yellow);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;font-size:21px;font-weight:800;line-height:1.45}
+.expbox .d{font-size:15px;color:var(--sub);font-weight:600;margin-top:8px}
+.cap{font-size:15px;color:var(--sub);max-width:260px;text-align:center}
+.opts{display:flex;flex-direction:column;gap:12px;flex:1;min-width:290px;max-width:520px}
+.opts > span{align-self:flex-start}
+.opt{text-align:left;padding:16px 18px;border-radius:16px;border:3px solid var(--line);background:#fff;font-size:19px;font-family:inherit;cursor:pointer;color:var(--ink);min-height:58px;font-weight:600;transition:transform .15s, box-shadow .15s}
+.opt.sel{border-color:var(--lpurple);background:var(--lpurple-l);font-weight:800}
+.ask-note{background:#FAF7F2;border:2px dashed var(--gray);border-radius:16px;padding:12px 16px;font-size:17px;color:var(--sub);margin-bottom:16px;line-height:1.55}
+
+/* domino */
+.dominos{display:flex;align-items:flex-end;justify-content:center;gap:2px;flex-wrap:wrap;padding:26px 0 10px}
+.dom{width:128px;height:172px;border-radius:14px;background:#fff;border:4px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:10px 8px;text-align:center;opacity:0;transform-origin:bottom right;box-shadow:0 6px 0 rgba(0,0,0,.08)}
+.dom .e{font-size:38px}
+.dom .t{font-size:12px;font-weight:800;margin-top:6px;opacity:.9}
+.dom .l{font-size:15px;font-weight:700;margin-top:6px;line-height:1.35;word-break:keep-all}
+.dom.dash{border-style:dashed}
+.dom.run{animation:domIn .35s ease forwards, domFall .6s ease forwards}
+@keyframes domIn{to{opacity:1}}
+@keyframes domFall{0%{transform:rotate(0)}30%{box-shadow:0 0 0 8px var(--g), 0 6px 0 rgba(0,0,0,.08);transform:rotate(0) scale(1.06)}
+  60%{transform:rotate(17deg)}100%{transform:rotate(8deg);box-shadow:0 6px 0 rgba(0,0,0,.08)}}
+.darr{font-size:24px;color:var(--gray);align-self:center;opacity:0;animation:fadeIn .3s forwards;padding:0 3px}
+.after{opacity:0;animation:fadeIn .6s forwards}
+.msg{font-size:21px;font-weight:800;text-align:center;margin:18px 0 12px}
+.more{background:#fff;border:3px solid var(--accent);border-radius:20px;padding:16px 20px;text-align:center;margin-top:16px}
+.more h3{margin:0 0 12px;font-size:21px}
+.more .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* 사회화 지도 */
+.uni{width:100%;height:auto;background:#fff;border-radius:24px;border:2px solid var(--line);display:block}
+.nd{cursor:pointer}
+.nd.active circle{stroke-width:7}
+.pop{transform-box:fill-box;transform-origin:center;opacity:0}
+.flt{transform-box:fill-box;transform-origin:center;animation:flt 2.6s ease-in-out infinite alternate}
+@keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
+@keyframes flt{from{transform:translateY(-5px)}to{transform:translateY(5px)}}
+.edr{stroke-dasharray:1;stroke-dashoffset:1;opacity:0;animation:draw .45s ease forwards}
+.edf{opacity:0;animation:fadeIn .45s ease forwards}
+@keyframes draw{0%{opacity:1;stroke-dashoffset:1}100%{opacity:1;stroke-dashoffset:0}}
+.chrw{transform-box:fill-box;transform-origin:50% 100%}
+.chrw.hl{animation:chrHL .7s ease}
+/* 스틱맨 관절·표정 */
+.chr .j{transform-box:view-box;transform-origin:0 0;transition:transform .5s cubic-bezier(.4,1.35,.5,1)}
+.fx{opacity:0;transition:opacity .25s}
+.chr[data-ex="neutral"] .fx-neutral,.chr[data-ex="think"] .fx-think,.chr[data-ex="surprise"] .fx-surprise,
+.chr[data-ex="tilt"] .fx-tilt,.chr[data-ex="happy"] .fx-happy,.chr[data-ex="joy"] .fx-joy{opacity:1}
+.blink{transform-box:fill-box;transform-origin:center;animation:blink 4.4s infinite}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.chr[data-pose="happy"] .bob{animation:hop .45s ease 2}
+.chr[data-pose="surprise"] .bob{animation:jolt .45s ease}
+@keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes jolt{0%,100%{transform:translateY(0)}35%{transform:translateY(-10px)}}
+.chr[data-pose="wave"] .jrf{animation:wave .5s ease-in-out infinite alternate}
+@keyframes wave{from{transform:rotate(-75deg)}to{transform:rotate(-25deg)}}
+.chr .breath{animation:breath 3.2s ease-in-out infinite}
+@keyframes breath{0%,100%{transform:translateY(0)}50%{transform:translateY(1.5px)}}
+.spark{opacity:0;transition:opacity .3s}
+.chr[data-ex="joy"] .spark{opacity:1}
+.spark text{transform-box:fill-box;transform-origin:center;opacity:0;animation:twinkle var(--d,1.6s) ease-in-out var(--w,0s) infinite}
+@keyframes twinkle{0%,100%{transform:scale(.3) rotate(-10deg);opacity:0}35%{transform:scale(1.15) rotate(8deg);opacity:1}60%{transform:scale(.8) rotate(0);opacity:.7}}
+.ntag.drop{transform-box:fill-box;transform-origin:center;animation:tagdrop .75s cubic-bezier(.3,1.5,.5,1)}
+@keyframes tagdrop{0%{transform:translateY(-90px) scale(1.6) rotate(-14deg);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+/* 안내 스틱맨 */
+.headrow{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
+.headrow .ht{flex:1;min-width:0}
+.guide{display:flex;align-items:flex-end;gap:4px;flex-shrink:0}
+.gsvg{width:96px;height:142px;overflow:visible}
+@media (max-width:700px){.gsvg{width:66px;height:98px}}
+/* 이름표 화면 */
+.namewrap{display:flex;gap:26px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.namesvg{width:260px;height:300px;overflow:visible}
+.nameform{flex:1;min-width:280px;max-width:480px}
+.nameform input{width:100%;font-size:26px;font-weight:800;padding:14px 18px;border-radius:16px;border:3px solid var(--line);font-family:inherit;text-align:center;background:#fff;color:var(--ink);margin:6px 0 12px}
+.nameform input:focus{outline:none;border-color:var(--accent)}
+.sndbtn{border:2px solid var(--line);background:#fff;border-radius:999px;min-width:48px;height:40px;font-size:18px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px;padding:0 10px;color:var(--sub);font-weight:700}
+.sndbtn.on{border-color:var(--accent);background:var(--coral-l);color:var(--accent-d)}
+@keyframes chrHL{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+.halo{transform-box:fill-box;transform-origin:center;animation:halo 2.8s ease-in-out infinite alternate}
+@keyframes halo{from{transform:scale(.96);opacity:.55}to{transform:scale(1.05);opacity:.85}}
+.detail{background:#fff;border-radius:16px;padding:14px 18px;border-left:7px solid var(--gray);min-height:56px;margin-top:12px;font-size:18px;line-height:1.55}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:15px;color:var(--sub);margin-top:12px;justify-content:center}
+.legend i{display:inline-block;width:15px;height:15px;border-radius:50%;border:3px solid;margin-right:6px;vertical-align:-3px}
+
+/* boxes */
+.box{background:#fff;border:2px solid var(--line);border-radius:20px;padding:18px 22px;font-size:19px;line-height:1.65;margin-top:14px}
+.box.key{border-color:var(--accent);background:#FFF8F3}
+mark{background:linear-gradient(transparent 55%,#FFD9A8 55%);color:inherit;font-weight:800;padding:0 2px}
+.yn{display:flex;gap:18px;justify-content:center;margin:24px 0}
+.yn .btn{min-width:160px}
+.flow{display:flex;flex-direction:column;align-items:stretch;gap:0;max-width:760px;margin:0 auto;width:100%}
+.fstep{background:#fff;border:3px solid var(--line);border-radius:18px;padding:12px 18px}
+.fstep .h{font-weight:800;font-size:18px}
+.fstep .items{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.fstep .it{background:var(--bg);border-radius:999px;padding:5px 12px;font-size:15px;font-weight:700}
+.fdown{text-align:center;color:var(--gray);font-size:22px;font-weight:800;line-height:1.3}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.row2{grid-template-columns:1fr}}
+
+/* cloze (빈칸 복습) */
+.cloze{background:#fff;border:3px solid var(--accent);border-radius:22px;padding:18px 22px;margin-top:18px}
+.cloze .ch{display:flex;align-items:center;gap:8px;font-weight:800;font-size:18px;color:var(--accent-d);margin-bottom:10px}
+.cloze .txt{font-size:22px;line-height:2.3}
+.cb{display:inline-flex;align-items:center;justify-content:center;min-width:120px;min-height:46px;padding:4px 14px;margin:0 3px;border-radius:12px;
+  border:3px dashed #D9CBB6;background:#FBF6EC;color:#BDB1A2;font-size:20px;font-weight:800;font-family:inherit;cursor:pointer;vertical-align:middle}
+.cb.filled{border-style:solid;border-color:var(--yellow);background:var(--yellow-l);color:#7A5A00}
+.cb.wrong{border-color:#D9534F;background:#FDE4E2;color:#B03A36}
+.cb.shk{animation:shake .45s}
+.cb.ok{border-style:solid;border-color:var(--green);background:var(--green-l);color:#2D7442;cursor:default}
+.cb.rev{border-style:solid;border-color:var(--gray);background:#F4EFE7;color:var(--ink);cursor:default}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.bank{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;padding-top:14px;border-top:2px dashed var(--line)}
+.bank .chip{font-weight:800}
+.bank .chip.usedw{visibility:hidden}
+.cfoot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px}
+.cmsg{font-size:17px;font-weight:700;line-height:1.5}
+.cmsg.good{color:#2D7442}.cmsg.bad{color:#B03A36}.cmsg.hint{color:#8A6400}.cmsg.rev{color:var(--sub)}
+
+
+/* sentence */
+.sent-prev{background:#fff;border-radius:20px;padding:20px 24px;font-size:22px;line-height:1.95;border:2px solid var(--line)}
+.mine{background:#fff;border:2px dashed var(--accent);border-radius:20px;padding:16px 20px;margin-top:22px}
+.mine h3{margin:0 0 4px;font-size:19px;color:var(--accent-d)}
+.mine label{display:block;font-weight:800;font-size:17px;margin:14px 0 6px}
+.mine textarea{width:100%;font-size:18px;padding:12px 16px;border-radius:14px;border:2px solid var(--line);font-family:inherit;min-height:96px;resize:vertical;background:#fff;color:var(--ink);line-height:1.5}
+.mine textarea:focus{outline:none;border-color:var(--accent)}
+.mine .cnt{font-size:13px;color:var(--sub);text-align:right;margin-top:4px}
+
+/* ending */
+.ref-card{background:#fff;border:3px solid var(--coral);border-radius:20px;padding:16px 22px;margin-top:18px}
+.ref-card .h{font-weight:800;color:var(--accent-d);font-size:17px;margin-bottom:6px}
+.ref-card p{margin:2px 0;font-size:20px;line-height:1.6;font-weight:600}
+.ref-card .mine-h{font-weight:800;color:var(--sub);font-size:15px;margin:12px 0 4px;padding-top:10px;border-top:2px dashed var(--line)}
+.ref-card p.my{font-weight:700;color:#5B4636}
+.future-card{background:#FAF7F2;border:3px dashed var(--gray);border-radius:20px;padding:18px 22px;margin-top:18px;text-align:center}
+.future-card .h{font-size:22px;font-weight:800}
+.fwrap{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px 0}
+.fwrap .s{background:#fff;border:2px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:800}
+.fwrap .s.q{border-style:dashed;border-color:var(--gray)}
+.fwrap .a{color:var(--gray);font-weight:800;font-size:20px}
+.fchips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:560px}
+.fchip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:700;font-size:16px;cursor:pointer;font-family:inherit;color:var(--ink);opacity:0;animation:popc .4s cubic-bezier(.3,1.6,.5,1) forwards}
+.fchip.static{opacity:1;animation:none}
+.fchip.sel{border-color:var(--coral);background:var(--coral-l);font-weight:800}
+@keyframes popc{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+.future-card .qq{font-size:19px;color:var(--sub);font-weight:700;text-align:center}
+.future-card .core{text-align:center}
+.future-card .core{font-size:18px;font-weight:800;color:#5B4636;margin-top:10px}
+.think-q{background:#FFFDF7;border:2px dashed var(--yellow);text-align:center;font-size:19px}
+.final-card{background:linear-gradient(135deg,#FFF1E8,#FFF8F3);border:3px solid var(--accent);border-radius:22px;padding:22px 26px;margin-top:18px;text-align:center;font-size:22px;font-weight:800;line-height:1.7;color:#5B3A2A}
+.final-card mark{padding:0 3px}
+.end-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:26px 0 30px}
+
+/* title */
+.title-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 0}
+.hero{width:100%;max-width:640px}
+.fl{animation:float 3.2s ease-in-out infinite alternate}
+@keyframes float{from{transform:translateY(-6px)}to{transform:translateY(6px)}}
+h1.big{font-size:48px;margin:10px 0 6px;letter-spacing:-1px}
+.subtitle{font-size:22px;color:var(--sub);margin:0 0 30px}
+.tiny{font-size:14px;color:var(--sub);margin-top:26px}
+
+/* toast & modal */
+#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(30px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;opacity:0;transition:.25s;pointer-events:none;z-index:50}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#modal{position:fixed;inset:0;background:rgba(40,30,20,.55);display:flex;align-items:center;justify-content:center;z-index:40;padding:16px}
+#modal.hidden{display:none}
+.mbox{background:var(--bg);border-radius:22px;padding:20px;max-width:760px;width:100%;max-height:92vh;overflow:auto;text-align:center}
+.mbox img{width:100%;border-radius:12px;border:2px solid var(--line);margin:12px 0}
+.mbox p{margin:6px 0;font-size:17px;line-height:1.5}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<div id="modal" class="hidden"></div>
+<script>
+"use strict";
+/* =========================================================
+   ★ 참여 기록 설정 ★
+   구글 앱스크립트를 배포한 뒤 받은 '웹 앱 URL'을 아래 따옴표 안에 붙여 넣으세요.
+   비워 두면 기록을 보내지 않고 앱만 동작합니다.
+   ========================================================= */
+const SHEET_URL = '';
+/* =========================================================
+   데이터
+   ========================================================= */
+const FONT = '"Noto Sans KR","Noto Sans CJK KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif';
+const EMOJI_FONT = '"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif';
+const NUM_CHAINS = 3;
+const DEPTHS = [3, 3, 3];   // 세 경험 모두 같은 단계(환경 → 경험 → 상황 → 생각 → 변화)
+const MINE_MAX = 100;
+
+const NOW_CATS = [
+  {name:'내가 좋아하는 것', items:[['⚽','운동'],['🎨','그림 그리기'],['🎵','음악 듣기'],['🎮','게임'],['📖','책 읽기'],['🍳','요리']]},
+  {name:'내가 관심 있는 것', items:[['🐾','동물'],['🌏','다른 나라 문화'],['🔬','과학'],['💻','컴퓨터'],['🎬','영상 만들기'],['👕','패션']]},
+  {name:'내가 잘하는 것', items:[['🗣️','말하기'],['✍️','글쓰기'],['🧩','문제 해결'],['🏃','달리기'],['🛠️','만들기'],['👂','잘 들어 주기']]},
+  {name:'내가 중요하게 생각하는 것', items:[['🤝','협동'],['💛','배려'],['⚖️','정직'],['🔥','끈기'],['🌱','성장'],['😊','즐거움']]},
+  {name:'내가 이루고 싶은 것', items:[['🎓','원하는 진로'],['🏆','대회 입상'],['🌍','세상에 도움 주기'],['🎤','무대에 서기'],['📚','좋은 성적'],['🧳','세계 여행']]},
+];
+
+const FAMILY_WHO = ['부모님이','할머니·할아버지가','형제자매가','가까운 어른이'];
+
+const DOMAINS = [
+  {id:'family', emoji:'🏠', name:'가정', desc:'가족·가까운 어른과의 경험', cards:[
+    {id:'habit', emoji:'🍚', title:'생활 습관 배우기', short:'생활 습관을 배운 경험', desc:'식사·정리 같은 생활 습관을 배운 경험',
+      when:['어릴 때 밥을 먹을 때','방 정리를 하던 날','아침마다 등교 준비를 할 때','용돈을 처음 받았을 때'], who:FAMILY_WHO,
+      say:['스스로 하니까 멋지다','하나씩 차근차근 해 보자','고마워, 덕분에 편하다','처음엔 누구나 어려워','계획을 세우니까 좋구나']},
+    {id:'together', emoji:'🧺', title:'함께한 시간', short:'가족과 함께한 시간', desc:'가족·가까운 어른과 무언가를 함께 한 경험',
+      when:['주말에 함께 요리를 할 때','같이 여행을 갔을 때','함께 산책이나 운동을 할 때','명절에 친척들이 모였을 때'], who:FAMILY_WHO,
+      say:['너랑 하니까 즐겁다','손이 야무지네','다음에 또 같이 하자','천천히 해도 괜찮아','이야기를 잘 들어 주는구나']},
+    {id:'words', emoji:'💬', title:'기억에 남는 한마디', short:'가족의 한마디', desc:'가족·가까운 어른에게 들은 말',
+      when:['힘든 일이 있었던 날','시험이 끝난 뒤','무언가를 새로 시작할 때','중학교에 입학하던 날'], who:FAMILY_WHO,
+      say:['결과보다 노력한 게 중요해','너는 끈기가 있구나','네가 하고 싶은 걸 해 봐','쉬었다가 다시 해 보자','많이 컸구나']},
+    {id:'chore', emoji:'🧹', title:'집안일 나누기', short:'집안일을 나눈 경험', desc:'가족과 집안일을 나누어 맡은 경험',
+      when:['대청소를 하던 날','동생을 돌봐 준 날','분리수거를 맡았을 때','저녁 식사를 준비할 때'], who:FAMILY_WHO,
+      say:['네가 도와줘서 든든하다','책임감이 생겼구나','우리 가족은 한 팀이야','같이 하니까 금방 끝났다','다음엔 다른 일도 맡아 볼래?']},
+  ]},
+  {id:'school', emoji:'🏫', name:'학교', desc:'수업·선생님·학교 활동', cards:[
+    {id:'present', emoji:'🗣️', title:'발표 경험', short:'발표 경험', desc:'수업이나 모둠에서 발표한 경험',
+      when:['수업 시간에 발표를 마친 뒤','모둠 발표를 한 날','학급 회의에서 의견을 말한 뒤','학예회 무대에 선 뒤'], who:['친구가','선생님이','모둠 친구가','짝꿍이'],
+      say:['생각보다 발표를 잘하는데?','목소리가 또렷하다','다음에도 해 볼래?','처음이라 떨렸겠다','준비를 많이 했구나']},
+    {id:'praise', emoji:'👏', title:'선생님의 칭찬', short:'선생님의 칭찬', desc:'선생님께 인정받거나 칭찬받은 경험',
+      when:['과제를 낸 뒤','청소를 끝까지 한 날','어려운 문제를 풀었을 때','친구를 도와준 날'], who:['담임 선생님이','교과 선생님이','동아리 선생님이','상담 선생님이'],
+      say:['꼼꼼하게 잘했구나','책임감이 있네','포기하지 않은 게 멋지다','조금만 더 다듬어 보자','친구를 잘 챙기는구나']},
+    {id:'newact', emoji:'🧪', title:'새로운 활동', short:'학교의 새로운 활동', desc:'동아리·체험·실험처럼 처음 해 본 활동',
+      when:['동아리 활동 첫날','체험 학습에서','처음 해 본 실험 시간에','진로 체험의 날에'], who:['선생님이','선배가','친구가','체험 강사님이'],
+      say:['이런 거 잘 맞는 것 같다','관심 있으면 더 해 봐','처음치고 잘한다','해 보니까 어때?','손재주가 있네']},
+    {id:'lesson', emoji:'📚', title:'수업에서 배운 것', short:'수업에서 배운 것', desc:'수업 시간에 새롭게 알게 되거나 생각해 본 것',
+      when:['사회 수업 토론 시간에','과학 실험 결과를 정리할 때','수업 중 질문을 했을 때','모둠 탐구 과제를 할 때'], who:['선생님이','짝꿍이','모둠 친구가','친구가'],
+      say:['그 생각 좋은데?','질문을 잘하는구나','설명을 잘해 주네','궁금한 건 더 찾아봐','새로운 시각이다']},
+  ]},
+  {id:'peer', emoji:'🧑‍🤝‍🧑', name:'또래 집단', desc:'친구들과 함께한 경험', cards:[
+    {id:'invite', emoji:'⚽', title:'친구의 권유', short:'친구의 권유', desc:'친구가 함께 해 보자고 권한 경험',
+      when:['점심시간에','방과 후에','주말에','쉬는 시간에'], who:['친한 친구가','같은 반 친구가','새로 사귄 친구가','동아리 친구가'],
+      say:['같이 해 보자!','너도 해 보면 재밌을 거야','우리 팀에 들어올래?','한번 구경만 해 봐','네가 있으면 더 재밌겠다']},
+    {id:'team', emoji:'🤝', title:'함께한 모둠 활동', short:'친구들과의 모둠 활동', desc:'친구들과 힘을 모아 무언가를 한 경험',
+      when:['모둠 과제를 할 때','체육 대회 준비를 할 때','학급 행사를 준비할 때','합창 대회를 연습할 때'], who:['모둠 친구가','같은 반 친구가','친한 친구가','반장이'],
+      say:['네 덕분에 잘 됐어','네 아이디어 좋다','같이 하니까 든든하다','이번엔 역할을 바꿔 볼까?','정리를 잘하네']},
+    {id:'reaction', emoji:'😄', title:'친구의 반응', short:'친구의 반응', desc:'내가 한 일에 친구가 반응해 준 경험',
+      when:['내가 그린 그림을 보여 줬을 때','좋아하는 것을 이야기했을 때','친구를 도와줬을 때','내가 만든 것을 보여 줬을 때'], who:['친한 친구가','같은 반 친구가','짝꿍이','새로 사귄 친구가'],
+      say:['너 이거 진짜 잘한다','나도 그거 좋아해!','고마워, 도움이 됐어','그런 것도 좋아하는구나','너한테 배우고 싶다']},
+    {id:'hobby', emoji:'🎸', title:'취미가 같은 친구', short:'취미가 같은 친구', desc:'좋아하는 것이 같은 친구와 함께한 경험',
+      when:['같은 노래를 좋아한다는 걸 알았을 때','함께 게임을 하던 날','같이 그림을 그리던 날','같이 운동하던 날'], who:['친한 친구가','같은 반 친구가','새로 사귄 친구가','동아리 친구가'],
+      say:['너랑 취미가 같아서 좋다','다음에 같이 해 볼래?','네가 알려 줘서 알게 됐어','너는 이런 거 잘 아는구나','우리 같이 더 해 보자']},
+  ]},
+  {id:'media', emoji:'📱', name:'대중 매체', desc:'영상·책·음악·인물', media:true, cards:[
+    {id:'video', emoji:'🎬', title:'기억에 남는 영상', short:'기억에 남는 영상', desc:'다큐멘터리·영화·짧은 영상',
+      content:['다큐멘터리','영화','짧은 영상(쇼츠)','애니메이션'],
+      scene:['힘든 상황을 이겨 내는 모습을','서로 돕고 협력하는 모습을','새로운 세상을 탐험하는 모습을','꿈을 향해 노력하는 모습을','가족을 소중히 여기는 모습을']},
+    {id:'person', emoji:'🌟', title:'인상 깊은 인물', short:'인상 깊은 인물', desc:'미디어에서 만난 닮고 싶은 사람',
+      content:['운동선수 인터뷰','과학자 이야기','봉사하는 사람의 이야기','예술가의 이야기'],
+      scene:['끝까지 포기하지 않는 모습을','다른 사람을 돕는 모습을','자기 일을 즐기는 모습을','실수를 인정하고 다시 도전하는 모습을','동료를 존중하는 모습을']},
+    {id:'favorite', emoji:'🎵', title:'좋아하는 콘텐츠', short:'좋아하는 콘텐츠', desc:'노래·책·웹툰·게임 속 이야기',
+      content:['노래 가사와 뮤직비디오','책·웹툰','게임 속 이야기','드라마'],
+      scene:['친구를 소중히 여기는 모습을','자기만의 개성을 드러내는 모습을','새로운 것을 만들어 내는 모습을','어려움 속에서도 웃는 모습을','약한 사람을 지켜 주는 모습을']},
+    {id:'value', emoji:'💡', title:'미디어 속 생각', short:'미디어에서 접한 생각', desc:'뉴스·캠페인 등에서 접한 가치나 생각',
+      content:['뉴스','공익 광고','캠페인 영상','유튜브 강연'],
+      scene:['환경을 지키려고 노력하는 모습을','서로 다름을 존중하는 모습을','작은 실천으로 세상을 바꾸는 모습을','다른 사람의 이야기에 귀 기울이는 모습을','도움이 필요한 사람과 함께하는 모습을']},
+  ]},
+];
+DOMAINS.forEach(d => d.cards.forEach(c => {
+  if (d.media) {
+    c.slots = [{key:'content', q:'무엇에서 보았나요?', opts:c.content},{key:'scene', q:'어떤 모습이 인상 깊었나요?', opts:c.scene}];
+    c.tpl = [{s:'content'},'에서 ',{s:'scene'},' 보았다.'];
+  } else {
+    c.slots = [{key:'when', q:'언제였나요?', opts:c.when},{key:'who', q:'누가 말했나요?', opts:c.who},{key:'say', q:'어떤 말을 했나요?', opts:c.say}];
+    c.tpl = [{s:'when'},' ',{s:'who'},' 나에게 “',{s:'say'},'”라고 말했다.'];
+  }
+}));
+
+/* 나의 생각·해석 선택지
+   - mirror: 다른 사람의 반응을 들은 경험 (거울 자아)
+   - media : 대중 매체 경험 (거울 자아라고 부르지 않음)
+   - plain : 반응 단계 없이 경험만 떠올린 경우 */
+const THOUGHTS = {
+  mirror:[
+    {id:'accept', text:'나도 그런 것 같아.', short:'나도 그런 것 같아'},
+    {id:'discover', text:'처음엔 몰랐는데, 그럴 수도 있겠다.', short:'그럴 수도 있겠다'},
+    {id:'motivate', text:'그 말 덕분에 한 번 더 해 보고 싶어졌어.', short:'더 해 보고 싶어'},
+    {id:'doubt', text:'아직은 잘 모르겠어. 나는 그렇게 생각하지 않아.', short:'아직 잘 모르겠어'},
+  ],
+  media:[
+    {id:'accept', text:'나도 저런 사람이 되고 싶다.', short:'저렇게 되고 싶어'},
+    {id:'discover', text:'나와 닮은 점이 있는 것 같다.', short:'나와 닮았어'},
+    {id:'motivate', text:'나도 저런 것을 해 보고 싶어졌다.', short:'나도 해 보고 싶어'},
+    {id:'doubt', text:'멋지지만 나와는 조금 다른 것 같다.', short:'나와는 조금 달라'},
+  ],
+  plain:[
+    {id:'accept', text:'나도 잘할 수 있을 것 같아.', short:'잘할 수 있을 것 같아'},
+    {id:'discover', text:'이런 게 나와 잘 맞는 것 같아.', short:'나와 잘 맞아'},
+    {id:'motivate', text:'한 번 더 해 보고 싶어졌어.', short:'더 해 보고 싶어'},
+    {id:'doubt', text:'아직은 잘 모르겠어.', short:'아직 잘 모르겠어'},
+  ],
+};
+
+/* 나의 변화(실제 변화)와 탐색(다음 행동)을 분리 */
+const CHANGES = {
+  conf:{emoji:'⭐', label:'자신감', text:'자신감이 생겼다'},
+  interest:{emoji:'❤️', label:'새로운 관심', text:'새로운 관심이 생겼다'},
+  action:{emoji:'🏃', label:'새로운 행동', text:'새로운 행동을 시작했다'},
+  value:{emoji:'🌱', label:'새로운 가치', text:'중요하게 생각하는 것이 생겼다'},
+  goal:{emoji:'🎯', label:'새로운 목표', text:'새로운 목표가 생겼다'},
+  explore:{emoji:'🔍', label:'나를 더 알아보기', text:'나를 더 알아보고 싶어요', ask:true},
+  unsure:{emoji:'❓', label:'아직 잘 모르겠어', text:'아직은 잘 모르겠어요', ask:true},
+  retry:{emoji:'🔄', label:'다른 경험 해 보기', text:'다른 경험을 더 해 보고 싶어요', ask:true},
+};
+const CHANGE_REAL = ['conf','interest','action','value','goal'];
+const CHANGE_ASK = ['explore','unsure','retry'];
+
+const FUTURE = [['🧑‍🤝‍🧑','새로운 친구'],['🏫','새로운 학교생활'],['🎸','새로운 취미'],['📘','새로운 공부'],['📺','새로운 미디어 경험'],['🎯','새로운 목표']];
+
+const SENT_B = ['도전하는 즐거움','함께하는 것의 소중함','나의 새로운 모습','노력의 의미','새로운 관심거리','나를 믿는 마음','다른 사람을 배려하는 마음'];
+const SENT_C = ['도전을 즐기는','함께하는 것을 좋아하는','끈기 있는','호기심이 많은','다른 사람을 돕는','나만의 개성이 있는','계속 성장하는','노력하는'];
+
+const MINE_Q = ['오늘 활동을 하며 새롭게 알게 된 점이나 느낀 점을 써 보세요.'];
+
+/* 빈칸 복습 활동: {g:그룹}은 빈칸. 같은 그룹 안에서는 순서가 바뀌어도 정답 */
+const CLOZE = {
+  concept:{
+    parts:['개인이 자신이 속한 사회의 ',{g:'a'},', ',{g:'a'},', ',{g:'a'},', ',{g:'a'},' 등을 배워 나가는 과정을 ',{g:'b'},'(이)라고 합니다.'],
+    groups:{a:['언어','규범','가치관','행동 양식'], b:['사회화']},
+    distract:['외모','성적','거울 자아'],
+    hint:'사회에서 배우는 것 네 가지는 순서가 바뀌어도 괜찮아요. 마지막 칸은 오늘 활동 내내 살펴본 ‘과정’의 이름이에요.',
+    good:'정답! 우리는 사회화를 통해 사회의 여러 가지를 배워 나가요.',
+  },
+  identity:{
+    parts:['사회화 과정에서 겪은 ',{g:'a'},'은 나만의 ',{g:'b'},'과 ',{g:'b'},' 형성에 영향을 줍니다.'],
+    groups:{a:['고유한 경험'], b:['개성','자아 정체성']},
+    distract:['거울 자아','규범','외모'],
+    hint:'위 흐름도의 노란 칸과 주황 칸 제목을 다시 보세요.',
+    good:'정답! 나의 경험이 나의 개성과 자아 정체성을 만들어 왔어요.',
+  },
+};
+
+/* 색 구분 */
+const TIER = {
+  src:{c:'#4A8FD9', l:'#E4F0FC', name:'사회화 환경'},
+  act:{c:'#E0A820', l:'#FFF3D1', name:'경험'},
+  rea:{c:'#7A55C0', l:'#EDE5FA', name:'타인의 반응·매체 경험'},
+  mir:{c:'#B9A3E3', l:'#F8F4FE', name:'나의 생각'},
+  chg:{c:'#4FA866', l:'#E2F4E6', name:'나의 변화'},
+  ask:{c:'#A89C8E', l:'#F4EFE7', name:'더 생각해 보기', dash:true},
+  now:{c:'#EE8866', l:'#FDE9E1', name:'현재의 나'},
+};
+const LEGEND = ['src','act','rea','mir','chg','now'];
+
+/* 화면 순서와 진행 표시 */
+const PMAP = {name:0,now:0,reveal:0,exp:1,situation:2,mirror:3,change:4,domino:5,universe:6,q9:7,concept:7,identity:7,sentence:8,ending:9};
+const PCOUNT = 10;
+const CHAIN_SCREENS = ['exp','situation','mirror','change','domino'];
+
+/* =========================================================
+   상태
+   ========================================================= */
+function newChain(k){ return {domain:null, card:null, v:{}, thought:null, change:null, depth:DEPTHS[k]}; }
+function initState(){
+  const chains = []; for (let i = 0; i < NUM_CHAINS; i++) chains.push(newChain(i));
+  return {screen:'title', hist:[], now:[], nowTab:0, custom:'', chains, cur:0, used:NUM_CHAINS,
+          q9:null, future:null, sent:{a:0, b:null, c:null}, mine:[''],
+          resetArm:false, cloze:{}, name:'', tagged:false, justTagged:false, sound:false};
+}
+let S = initState();
+let NODE_MAP = {};
+let lastRendered = null;
+let ENTERING = false;
+let LAST_TAP = null;
+
+/* =========================================================
+   도우미
+   ========================================================= */
+const $ = id => document.getElementById(id);
+function esc(s){ return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+function hasBatchim(word){
+  const chars = Array.from(String(word));
+  for (let i = chars.length - 1; i >= 0; i--) {
+    const code = chars[i].charCodeAt(0);
+    if (code >= 0xAC00 && code <= 0xD7A3) return (code - 0xAC00) % 28 !== 0;
+  }
+  return null;
+}
+function josa(word, a, b){ const h = hasBatchim(word); return h === null ? `${a}(${b})` : (h ? a : b); }
+function dom(ch){ return DOMAINS.find(d => d.id === ch.domain) || null; }
+function card(ch){ const d = dom(ch); return d ? (d.cards.find(c => c.id === ch.card) || null) : null; }
+function val(ch, key){ const c = card(ch); if (!c) return ''; const sl = c.slots.find(s => s.key === key); const i = ch.v[key]; return (sl && i != null) ? sl.opts[i] : ''; }
+function slotsDone(ch){ const c = card(ch); return !!c && c.slots.every(s => ch.v[s.key] != null); }
+function isMedia(ch){ const d = dom(ch); return !!(d && d.media); }
+function hasReact(ch){ return ch.depth >= 3; }
+function hasThought(ch){ return ch.depth >= 2; }
+function isMirror(ch){ return hasReact(ch) && !isMedia(ch); }          // 거울 자아가 등장하는 경험
+function thoughtKind(ch){ return isMedia(ch) ? 'media' : (hasReact(ch) ? 'mirror' : 'plain'); }
+function thoughtOpt(ch){ return THOUGHTS[thoughtKind(ch)].find(m => m.id === ch.thought) || null; }
+function thoughtEmoji(ch){ return isMirror(ch) ? '🪞' : '💭'; }
+function changeSet(ch){
+  if (hasThought(ch) && ch.thought === 'doubt') return CHANGE_ASK;
+  if (!hasThought(ch)) return CHANGE_REAL.concat(['unsure']);
+  return CHANGE_REAL;
+}
+function changeOpt(ch){ return ch.change ? CHANGES[ch.change] : null; }
+function isAsk(ch){ const g = changeOpt(ch); return !!(g && g.ask); }
+function chainComplete(ch){
+  if (!(ch.domain && ch.card)) return false;
+  if (hasReact(ch) && !slotsDone(ch)) return false;
+  if (hasThought(ch) && !ch.thought) return false;
+  return !!(ch.change && changeSet(ch).includes(ch.change));
+}
+function curChain(){ return S.chains[S.cur]; }
+function sentenceText(ch){ const c = card(ch); if (!c || !slotsDone(ch)) return ''; return c.tpl.map(p => typeof p === 'string' ? p : val(ch, p.s)).join(''); }
+function expText(ch){ return hasReact(ch) && slotsDone(ch) ? sentenceText(ch) : `${card(ch).title}: ${card(ch).desc}`; }
+function sceneShort(ch){ return val(ch, 'scene').replace(/[을를]$/, ''); }
+function whoShort(ch){ return val(ch, 'who').replace(/[이가]$/, ''); }
+function reactLabel(ch){ return isMedia(ch) ? sceneShort(ch) : `“${val(ch, 'say')}”`; }
+function reactEmoji(ch){ return isMedia(ch) ? '📺' : '👥'; }
+function usedChains(){ return S.chains.slice(0, S.used).filter(chainComplete); }
+function completedCount(){ return S.chains.filter(chainComplete).length; }
+/* 경험이 쌓일수록 당당해지는 자세 */
+const COUNT_POSE = [['idle','neutral'],['wave','neutral'],['hips','happy'],['open','joy']];
+function countPose(n){ return COUNT_POSE[Math.min(3, Math.max(0, n))]; }
+function nextAfterExp(ch){ return hasReact(ch) ? 'situation' : hasThought(ch) ? 'mirror' : 'change'; }
+const KNUM = ['한','두','세'];
+
+function wrapLabel(str, n, maxLines){
+  maxLines = maxLines || 3;
+  let s = String(str);
+  const lines = [];
+  while (s.length > n && lines.length < maxLines - 1) {
+    let cut = -1;
+    for (let i = Math.min(n, s.length - 1); i > 0; i--) { if (s[i] === ' ') { cut = i; break; } }
+    if (cut > 1) { lines.push(s.slice(0, cut)); s = s.slice(cut + 1); }
+    else { lines.push(s.slice(0, n)); s = s.slice(n); }
+  }
+  if (s.length > n + 1) s = s.slice(0, n) + '…';
+  lines.push(s);
+  return lines;
+}
+
+function toast(msg){
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1900);
+}
+
+/* =========================================================
+   나의 사회화 지도 — 장면 모델 (SVG와 PNG가 같은 모델 사용)
+   왼쪽: 경험의 흐름(원인 → 결과) / 오른쪽 중심: 현재의 나 + 주변에 떠 있는 '현재의 나를 이루는 것'
+   ========================================================= */
+const VW = 1000, VH = 640;
+const COLX = [70, 185, 300, 415, 530];
+const COLS_BY_DEPTH = {3:[0,1,2,3,4], 2:[0,1,3,4], 1:[0,1,4]};
+const COL_HEAD = [['사회화','환경'],['경험'],['타인의 반응','·매체 경험'],['나의','생각'],['나의','변화']];
+const COL_TIER = ['src','act','rea','mir','chg'];
+const CHX = 745, CHY = 262, CCY = 330;   // 캐릭터 머리 / 몸 중심
+const ROWS_FOR = {1:[330], 2:[215, 445], 3:[160, 330, 500]};
+const RES_SLOTS = {1:[[935,330]], 2:[[885,165],[885,495]], 3:[[745,125],[935,330],[745,545]]};
+const ROW_PH = ['경험 1을','경험 2를','경험 3을'];
+
+function mkEdge(x1, y1, r1, x2, y2, r2, dash, arrow){
+  const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+  const pad = arrow ? 3 : 0;
+  return {sx:x1 + ux * r1, sy:y1 + uy * r1, ex:x2 - ux * (r2 + pad), ey:y2 - uy * (r2 + pad), dash:!!dash, arrow:arrow !== false};
+}
+function chainNodes(ch, k, y){
+  const d = dom(ch), c = card(ch), t = thoughtOpt(ch), g = changeOpt(ch);
+  const all = {
+    0:{tier:'src', emoji:d.emoji, label:d.name, detail:`경험 ${k + 1}이 있었던 곳: ${d.name}`},
+    1:{tier:'act', emoji:c.emoji, label:c.title, detail:expText(ch)},
+    2:hasReact(ch) ? {tier:'rea', emoji:reactEmoji(ch), label:reactLabel(ch),
+        detail:isMedia(ch) ? `${val(ch, 'content')}에서 ${sceneShort(ch)}을 보았어요.` : `${whoShort(ch)}의 반응: “${val(ch, 'say')}”`} : null,
+    3:t ? {tier:'mir', emoji:thoughtEmoji(ch), label:t.short,
+        detail:isMirror(ch) ? `다른 사람의 반응을 거울삼아 이렇게 생각했어요: “${t.text}”` : `나는 이렇게 생각했어요: “${t.text}”`} : null,
+    4:{tier:g.ask ? 'ask' : 'chg', emoji:g.emoji, label:g.label, detail:g.ask ? `아직 더 생각해 보는 중: ${g.text}` : `이 경험 이후: ${g.text}`},
+  };
+  return COLS_BY_DEPTH[ch.depth].map(col => Object.assign({}, all[col], {id:`c${k}n${col}`, col, x:COLX[col], y, chain:k}));
+}
+/* opts.final: 완성된 경험만 보여 줌 / 아니면 upto 이전 경험 + 빈 줄 */
+function buildScene(opts){
+  opts = opts || {};
+  const rows = [], empty = [];
+  if (opts.final) {
+    const list = S.chains.slice(0, S.used).map((ch, k) => ({ch, k})).filter(o => chainComplete(o.ch));
+    const ys = ROWS_FOR[Math.max(1, list.length)];
+    list.forEach((o, i) => rows.push({ch:o.ch, k:o.k, y:ys[i]}));
+  } else {
+    const upto = opts.upto == null ? NUM_CHAINS : opts.upto;
+    const ys = ROWS_FOR[3];
+    S.chains.forEach((ch, k) => {
+      if (k < upto && chainComplete(ch)) rows.push({ch, k, y:ys[k]});
+      else empty.push({k, y:ys[k], cols:COLS_BY_DEPTH[ch.depth]});
+    });
+  }
+  const nodes = [], edges = [], resNodes = [];
+  rows.forEach(r => {
+    const ns = chainNodes(r.ch, r.k, r.y);
+    ns.forEach((n, i) => {
+      nodes.push(n);
+      if (i > 0) edges.push(mkEdge(ns[i - 1].x, r.y, 30, n.x, r.y, 30, false, true));
+    });
+    const last = ns[ns.length - 1];
+    edges.push(Object.assign(mkEdge(last.x, r.y, 30, CHX, CCY, 100, last.tier === 'ask', true), {toChar:true}));
+  });
+  const slots = RES_SLOTS[S.now.length] || [];
+  S.now.forEach((it, i) => {
+    const [x, y] = slots[i];
+    resNodes.push({id:'now' + i, x, y, emoji:it.emoji, label:it.label, tier:'now', detail:`현재의 나를 이루는 것: ${it.label}`});
+    // 위쪽 아이콘은 이름표 아래에서 화살표가 멈추도록
+    const r2 = y < CCY - 60 ? (Math.abs(x - CHX) < 40 ? 74 : 58) : 30;
+    edges.push(Object.assign(mkEdge(CHX, CCY, 100, x, y, r2, false, true), {toRes:true}));
+  });
+  const pe = opts.final ? ['open','joy'] : countPose(rows.length);
+  return {nodes, resNodes, edges, empty, pose:pe[0], ex:pe[1], rows};
+}
+
+/* =========================================================
+   스틱맨 — 관절(목·어깨·팔꿈치·엉덩이)과 표정
+   각도: 0 = 아래, +는 화면 왼쪽으로, -는 오른쪽으로 회전
+   ========================================================= */
+const POSES = {
+  idle:    {lu:25,  lf:0,    ru:-25,  rf:0,    h:0,   ll:26, rl:-26},
+  think:   {lu:25,  lf:0,    ru:-80,  rf:-132, h:8,   ll:24, rl:-24},
+  surprise:{lu:110, lf:50,   ru:-110, rf:-50,  h:-4,  ll:30, rl:-30},
+  tilt:    {lu:100, lf:-135,  ru:-25,  rf:0,    h:-14, ll:26, rl:-26},
+  happy:   {lu:125, lf:20,   ru:-125, rf:-20,  h:0,   ll:30, rl:-30},
+  wave:    {lu:25,  lf:0,    ru:-100, rf:-50,  h:6,   ll:26, rl:-26},
+  hips:    {lu:100, lf:-135, ru:-100, rf:135,   h:0,   ll:30, rl:-30},
+  open:    {lu:115, lf:-10,  ru:-115, rf:10,   h:0,   ll:32, rl:-32},
+};
+(function injectPoseCSS(){
+  const map = {lu:'jlu', lf:'jlf', ru:'jru', rf:'jrf', h:'jh', ll:'jll', rl:'jrl'};
+  let css = '';
+  Object.entries(POSES).forEach(([name, P]) => Object.entries(map).forEach(([k, cls]) => {
+    css += `.chr[data-pose="${name}"] .${cls}{transform:rotate(${P[k]}deg)}\n`;
+  }));
+  const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+})();
+
+const INK = '#5B4636';
+const FACE_SVG = (() => {
+  const br = d => `<path d="${d}" stroke="${INK}" stroke-width="3.5" stroke-linecap="round" fill="none"/>`;
+  const dots = (lx, ly, rx, ry, r) => `<g class="blink"><circle cx="${lx}" cy="${ly}" r="${r}" fill="${INK}"/><circle cx="${rx}" cy="${ry}" r="${r}" fill="${INK}"/></g>`;
+  const arcEyes = `<path d="M-16,-3 Q-11,-11 -6,-3 M6,-3 Q11,-11 16,-3" stroke="${INK}" stroke-width="3.5" stroke-linecap="round" fill="none"/>`;
+  const blush = `<circle cx="-19" cy="8" r="5" fill="#F4A3A3" opacity=".75"/><circle cx="19" cy="8" r="5" fill="#F4A3A3" opacity=".75"/>`;
+  const mouth = d => `<path d="${d}" stroke="${INK}" stroke-width="4" stroke-linecap="round" fill="none"/>`;
+  return [
+    `<g class="fx fx-neutral">${br('M-17,-15 L-6,-16 M6,-16 L17,-15')}${dots(-11,-4,11,-4,3.8)}${mouth('M-10,9 Q0,17 10,9')}</g>`,
+    `<g class="fx fx-think">${br('M-17,-17 Q-11,-23 -5,-18 M6,-14 L17,-15')}${dots(-7,-8,15,-8,3.6)}${mouth('M-3,13 L9,9')}</g>`,
+    `<g class="fx fx-surprise">${br('M-17,-19 Q-11,-26 -5,-20 M5,-20 Q11,-26 17,-19')}${dots(-11,-4,11,-4,4.8)}<ellipse cx="0" cy="13" rx="5" ry="7" fill="${INK}"/></g>`,
+    `<g class="fx fx-tilt">${br('M-17,-18 Q-11,-23 -5,-19 M6,-13 L17,-16')}${dots(-11,-4,11,-5,3.8)}${mouth('M-8,12 Q-2,8 3,11 T10,9')}</g>`,
+    `<g class="fx fx-happy">${br('M-17,-17 L-6,-18 M6,-18 L17,-17')}${arcEyes}${blush}${mouth('M-12,7 Q0,21 12,7')}</g>`,
+    `<g class="fx fx-joy">${br('M-17,-19 Q-11,-25 -5,-20 M5,-20 Q11,-25 17,-19')}${arcEyes}${blush}<path d="M-13,6 Q0,27 13,6 Z" fill="${INK}"/><path d="M-6,15 Q0,20 6,15" fill="#E98080"/></g>`,
+  ].join('');
+})();
+/* 반짝이 세 개: 머리 주변, 서로 다른 주기로 불규칙하게 반짝임 */
+const SPARKS = [[-54,-30,1.7,0],[50,-40,2.3,.6],[54,16,1.9,1.1]];
+const SPARK_SVG = `<g class="spark">${SPARKS.map(([x, y, d, w]) =>
+  `<g transform="translate(${x},${y})"><text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-size="20" style="--d:${d}s;--w:${w}s">✨</text></g>`).join('')}</g>`;
+
+function tagW(name){ return Math.max(40, 16 + Array.from(name || '').length * 13); }
+function tagSVG(name, state){
+  const nm = (name || '').trim() || '이름';
+  const w = tagW(nm);
+  const ghost = state === 'ghost';
+  return `<g class="ntag ${state === 'drop' ? 'drop' : ''}" ${ghost ? 'opacity=".55"' : ''}>
+    <rect class="ntag-r" x="${-w / 2}" y="63" width="${w}" height="21" rx="6" fill="#fff" stroke="#EE8866" stroke-width="2.5" ${ghost ? 'stroke-dasharray="4 3"' : ''}/>
+    <text class="ntag-t" x="0" y="78.5" text-anchor="middle" font-size="13" font-weight="800" fill="#C3624A">${esc(nm)}</text></g>`;
+}
+/* o: {x, y, s, pose, ex, name, tagState, steps, hl, hlDelay} */
+function charSVG(o){
+  o = o || {};
+  const st = `stroke="${INK}" stroke-width="5" stroke-linecap="round" fill="none"`;
+  const seg = len => `<line x1="0" y1="0" x2="0" y2="${len}" ${st}/>`;
+  let g = `<g transform="translate(${o.x || 0},${o.y || 0}) scale(${o.s || 1})">`;
+  g += `<g class="chrw ${o.hl ? 'hl' : ''}" ${o.hlDelay != null ? `style="animation-delay:${o.hlDelay}s"` : ''}>`;
+  g += `<g class="chr" data-pose="${o.pose || 'idle'}" data-ex="${o.ex || 'neutral'}" ${o.steps ? `data-steps="${o.steps}"` : ''}><g class="bob"><g class="breath">`;
+  g += `<g transform="translate(0,100)"><g class="j jll">${seg(54)}</g></g><g transform="translate(0,100)"><g class="j jrl">${seg(54)}</g></g>`;
+  g += `<line x1="0" y1="30" x2="0" y2="100" ${st}/>`;
+  g += `<g transform="translate(0,50)"><g class="j jlu">${seg(28)}<g transform="translate(0,28)"><g class="j jlf">${seg(26)}</g></g></g></g>`;
+  g += `<g transform="translate(0,50)"><g class="j jru">${seg(28)}<g transform="translate(0,28)"><g class="j jrf">${seg(26)}</g></g></g></g>`;
+  if (o.name != null) g += tagSVG(o.name, o.tagState);
+  g += `<g transform="translate(0,32)"><g class="j jh"><g transform="translate(0,-32)"><circle cx="0" cy="0" r="32" fill="#FFE3C8" stroke="${INK}" stroke-width="5"/>${FACE_SVG}</g></g></g>`;
+  g += SPARK_SVG;
+  g += `</g></g></g></g></g>`;
+  return g;
+}
+
+/* 단계별 안내 스틱맨 — 이전 화면의 자세에서 새 자세로 부드럽게 바뀜 */
+let LAST_GUIDE = {pose:'idle', ex:'neutral'};
+function guideHTML(pose, ex, line){
+  const from = LAST_GUIDE; LAST_GUIDE = {pose, ex};
+  const same = from.pose === pose && from.ex === ex;
+  const steps = same ? '' : `${from.pose},${from.ex},0;${pose},${ex},0.12`;
+  return `<div class="guide">
+    <svg class="gsvg" viewBox="-78 -70 156 232" aria-hidden="true">${charSVG({pose:same ? pose : from.pose, ex:same ? ex : from.ex, name:S.name || null, steps})}</svg></div>`;
+}
+function headRow(inner, guide){ return `<div class="headrow"><div class="ht">${inner}</div>${guide}</div>`; }
+
+function nodeSVG(nd, cls, style){
+  NODE_MAP[nd.id] = nd;
+  const t = TIER[nd.tier];
+  const lines = wrapLabel(nd.label, 7);
+  let s = `<g class="nd ${cls || ''}" data-a="node" data-v="${nd.id}" ${style ? `style="${style}"` : ''}>`;
+  s += `<circle cx="${nd.x}" cy="${nd.y}" r="30" fill="${t.l}" stroke="${t.c}" stroke-width="4" ${t.dash ? 'stroke-dasharray="7 5"' : ''}/>`;
+  s += `<text x="${nd.x}" y="${nd.y + 1}" text-anchor="middle" dominant-baseline="central" font-size="27">${esc(nd.emoji)}</text>`;
+  lines.forEach((ln, i) => {
+    s += `<text x="${nd.x}" y="${nd.y + 49 + i * 17}" text-anchor="middle" font-size="14" font-weight="700" fill="#3D3229">${esc(ln)}</text>`;
+  });
+  return s + `</g>`;
+}
+
+/* opts.pop: {id:delay} 개별 등장 / opts.seq: 최종 지도 순차 등장 연출 */
+function sceneSVG(sc, opts){
+  opts = opts || {};
+  const pop = opts.pop || {};
+  const seq = !!opts.seq;
+  let s = `<svg class="uni" viewBox="0 0 ${VW} ${VH}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="나의 사회화 지도" __SFX__>`;
+  s += `<defs><marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#B7AB9C"/></marker></defs>`;
+  // 열 제목
+  COL_HEAD.forEach((lines, i) => {
+    const t = TIER[COL_TIER[i]];
+    lines.forEach((ln, j) => {
+      s += `<text x="${COLX[i]}" y="${lines.length === 1 ? 64 : 53 + j * 20}" text-anchor="middle" font-size="15" font-weight="800" fill="${t.c === '#B9A3E3' ? '#8C73C8' : t.c}">${ln}</text>`;
+    });
+  });
+  s += `<line x1="30" y1="90" x2="585" y2="90" stroke="#F0E8DB" stroke-width="2"/>`;
+  // 줄 번호
+  sc.rows.forEach(r => {
+    s += `<circle cx="22" cy="${r.y}" r="13" fill="#F4EFE7"/><text x="22" y="${r.y + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="#7A6D61">${r.k + 1}</text>`;
+  });
+  // 빈 줄 (아직 찾지 않은 경험)
+  sc.empty.forEach(e => {
+    s += `<circle cx="22" cy="${e.y}" r="13" fill="#F7F2EA"/><text x="22" y="${e.y + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="#C8BCAE">${e.k + 1}</text>`;
+    s += `<line x1="${COLX[e.cols[0]]}" y1="${e.y}" x2="${COLX[e.cols[e.cols.length - 1]]}" y2="${e.y}" stroke="#EFE7DA" stroke-width="3" stroke-dasharray="6 8"/>`;
+    e.cols.forEach(c => { s += `<circle cx="${COLX[c]}" cy="${e.y}" r="26" fill="#FFFFFF" stroke="#E8DFD0" stroke-width="3" stroke-dasharray="6 5"/>`; });
+    s += `<text x="${COLX[2]}" y="${e.y + 50}" text-anchor="middle" font-size="14" font-weight="700" fill="#BDB1A2">${ROW_PH[e.k]} 찾으면 채워져요</text>`;
+  });
+  // 순차 연출 시간 계산
+  let t = .15;
+  const nodeDelay = {};
+  if (seq) sc.nodes.forEach(n => { nodeDelay[n.id] = t; t += .09; });
+  const tEdge = t + .05, tChar = tEdge + .5, tRes = tChar + .45;
+  // 연결선
+  sc.edges.forEach(e => {
+    const attrs = `x1="${e.sx.toFixed(1)}" y1="${e.sy.toFixed(1)}" x2="${e.ex.toFixed(1)}" y2="${e.ey.toFixed(1)}" stroke="#C9BEAF" stroke-width="3.5" ${e.arrow ? 'marker-end="url(#ah)"' : ''}`;
+    if (seq) {
+      const d = e.toRes ? tRes : tEdge;
+      s += e.dash
+        ? `<line ${attrs} stroke-dasharray="8 7" class="edf" style="animation-delay:${d}s"/>`
+        : `<line ${attrs} pathLength="1" class="edr" style="animation-delay:${d}s"/>`;
+    } else {
+      s += `<line ${attrs} ${e.dash ? 'stroke-dasharray="8 7"' : ''}/>`;
+    }
+  });
+  const chSteps = opts.steps || (seq ? `hips,happy,0;open,joy,${tChar.toFixed(2)}` : '');
+  s += `<circle class="halo" cx="${CHX}" cy="${CHY + 68}" r="98" fill="#FDE9E1"/>`;
+  s += charSVG({x:CHX, y:CHY, pose:sc.pose, ex:sc.ex, name:S.name || null, steps:chSteps, hl:seq, hlDelay:seq ? tChar : null});
+  s += `<text x="${CHX}" y="${CHY + 184}" text-anchor="middle" font-size="19" font-weight="800" fill="#C3624A">현재의 나</text>`;
+  sc.nodes.forEach(nd => {
+    const d = seq ? nodeDelay[nd.id] : pop[nd.id];
+    s += nodeSVG(nd, d != null ? 'pop' : '', d != null ? `animation:pop .45s cubic-bezier(.3,1.6,.5,1) ${d}s forwards` : '');
+  });
+  // 현재의 나를 이루는 것: 캐릭터 주변에 떠 있음
+  sc.resNodes.forEach((nd, i) => {
+    const d = seq ? tRes + .15 + i * .15 : pop[nd.id];
+    const fl = `flt 2.6s ease-in-out ${((d || 0) + .45 + i * .3).toFixed(2)}s infinite alternate`;
+    s += d != null
+      ? nodeSVG(nd, 'pop', `animation:pop .45s cubic-bezier(.3,1.6,.5,1) ${d}s forwards, ${fl}`)
+      : nodeSVG(nd, 'flt', `animation:${fl}`);
+  });
+  s += `</svg>`;
+  const sfxAttr = opts.sfx ? `data-sfx="${opts.sfx.includes('@') ? opts.sfx : `${opts.sfx}@${(tChar + .05).toFixed(2)}`}"` : '';
+  return s.replace('__SFX__', sfxAttr);
+}
+
+function legendHTML(){
+  return `<div class="legend">${LEGEND.map(k => `<span><i style="border-color:${TIER[k].c};background:${TIER[k].l}"></i>${TIER[k].name}</span>`).join('')}</div>`;
+}
+
+/* =========================================================
+   공통 UI 조각
+   ========================================================= */
+function header(){
+  if (S.screen === 'title') return '';
+  const pi = PMAP[S.screen];
+  let dots = '';
+  for (let i = 0; i < PCOUNT; i++) dots += `<span class="${i < pi ? 'done' : i === pi ? 'on' : ''}"></span>`;
+  const badge = CHAIN_SCREENS.includes(S.screen) ? `<span class="badge">경험 ${S.cur + 1}</span>` : '';
+  return `<header class="top"><div class="brand">🧩 나는 어떻게 만들어졌을까?</div><div class="hright">${badge}<div class="progress">${dots}</div>${soundBtn()}</div></header>`;
+}
+function nav(nextHTML, noBack){
+  return `<div class="navbar">${noBack ? '<span></span>' : '<button class="btn ghost" data-a="back">← 이전</button>'}${nextHTML || '<span></span>'}</div>`;
+}
+function nextBtn(label, action, value, enabled){
+  return `<button class="btn primary" data-a="${action}" ${value != null ? `data-v="${value}"` : ''} ${enabled ? '' : 'disabled'}>${label}</button>`;
+}
+/* 지금까지 고른 흐름을 알약으로 표시 (stage: 1=경험까지, 2=반응까지, 3=생각까지, 4=변화까지) */
+function chainPills(ch, stage){
+  const d = dom(ch), c = card(ch), t = thoughtOpt(ch), g = changeOpt(ch);
+  const parts = [];
+  if (d) parts.push(`<span class="pill blue">${d.emoji} ${esc(d.name)}</span>`);
+  if (c && stage >= 1) parts.push(`<span class="pill yellow">${c.emoji} ${esc(c.title)}</span>`);
+  if (c && stage >= 2 && hasReact(ch) && slotsDone(ch)) parts.push(`<span class="pill purple">${reactEmoji(ch)} ${esc(reactLabel(ch))}</span>`);
+  if (t && stage >= 3) parts.push(`<span class="pill lpurple">${thoughtEmoji(ch)} ${esc(t.short)}</span>`);
+  if (g && stage >= 4) parts.push(`<span class="pill ${g.ask ? 'gray' : 'green'}">${g.emoji} ${esc(g.label)}</span>`);
+  return `<div class="mini-chain">${parts.join('<span class="arr">→</span>')}</div>`;
+}
+
+/* =========================================================
+   빈칸 복습 활동
+   ========================================================= */
+function clozeBlanks(id){ return CLOZE[id].parts.filter(p => typeof p !== 'string'); }
+function clozeState(id){
+  if (!S.cloze[id]) {
+    const def = CLOZE[id];
+    const words = Object.values(def.groups).flat().concat(def.distract);
+    for (let i = words.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [words[i], words[j]] = [words[j], words[i]]; }
+    S.cloze[id] = {words, fill:clozeBlanks(id).map(() => null), wrong:[], tries:0, status:'open'};
+  }
+  return S.cloze[id];
+}
+function clozeDone(id){ const c = S.cloze[id]; return !!c && (c.status === 'done' || c.status === 'revealed'); }
+function clozeCheck(id){
+  const def = CLOZE[id], c = clozeState(id), blanks = clozeBlanks(id);
+  const wrong = blanks.map((b, i) => !def.groups[b.g].includes(c.words[c.fill[i]]));
+  c.tries += 1;
+  if (wrong.every(w => !w)) { c.status = 'done'; c.wrong = []; }
+  else if (c.tries >= 3) {
+    const used = {};
+    c.fill = blanks.map(b => { used[b.g] = (used[b.g] || 0); const w = def.groups[b.g][used[b.g]++]; return c.words.indexOf(w); });
+    c.status = 'revealed'; c.wrong = [];
+  } else { c.status = 'wrong'; c.wrong = wrong; c.shake = true; }
+}
+function clozeHTML(id){
+  const def = CLOZE[id], c = clozeState(id);
+  let bi = 0;
+  const locked = clozeDone(id);
+  const txt = def.parts.map(p => {
+    if (typeof p === 'string') return esc(p);
+    const i = bi++, w = c.fill[i];
+    let cls = 'cb';
+    if (w != null) cls += ' filled';
+    if (c.status === 'done') cls += ' ok';
+    else if (c.status === 'revealed') cls += ' rev';
+    else if (c.wrong[i]) cls += ' wrong' + (c.shake ? ' shk' : '');
+    return `<button class="${cls}" ${locked ? 'disabled' : `data-a="clozeBlank" data-v="${id}|${i}"`}>${w != null ? esc(c.words[w]) : `${i + 1}`}</button>`;
+  }).join('');
+  c.shake = false;
+  const usedSet = new Set(c.fill.filter(x => x != null));
+  const bank = locked ? '' : `<div class="bank">${c.words.map((w, i) => `<button class="chip ${usedSet.has(i) ? 'usedw' : ''}" data-a="clozeWord" data-v="${id}|${i}">${esc(w)}</button>`).join('')}</div>`;
+  const full = c.fill.every(x => x != null);
+  let msg = '';
+  if (c.status === 'done') msg = `<span class="cmsg good">🎉 ${esc(def.good)}</span>`;
+  else if (c.status === 'revealed') msg = `<span class="cmsg rev">📖 정답을 확인하고 문장을 한 번 더 읽어 보세요.</span>`;
+  else if (c.status === 'wrong') {
+    msg = `<span class="cmsg bad">빨간 칸을 다시 생각해 보세요. 칸을 누르면 단어가 돌아가요.</span>`;
+    if (c.tries >= 2) msg += `<span class="cmsg hint">💡 힌트: ${esc(def.hint)}</span>`;
+  } else msg = `<span class="cmsg rev">단어 카드를 누르면 빈칸에 차례로 들어가요.</span>`;
+  const btn = locked ? '' : `<button class="btn primary small" data-a="clozeCheck" data-v="${id}" ${full ? '' : 'disabled'}>확인</button>`;
+  return `<div class="cloze"><div class="ch">✏️ 빈칸을 채워 개념을 완성해 보세요</div>
+    <div class="txt">${txt}</div>${bank}
+    <div class="cfoot">${btn}<div style="display:flex;flex-direction:column;gap:4px">${msg}</div></div></div>`;
+}
+
+/* =========================================================
+   화면들
+   ========================================================= */
+const SCREENS = {};
+
+SCREENS.title = () => {
+  const bubbles = [['🏠',110,80,0],['🏫',150,215,.6],['🧑‍🤝‍🧑',530,75,1.1],['📱',560,215,.3],['🎬',330,30,.9]];
+  let hero = `<svg class="hero" viewBox="0 0 660 290" xmlns="http://www.w3.org/2000/svg">`;
+  bubbles.forEach(([e, x, y]) => { hero += `<line x1="${x}" y1="${y}" x2="330" y2="150" stroke="#E2D6C4" stroke-width="3" stroke-dasharray="6 6"/>`; });
+  hero += charSVG({x:330, y:120, pose:'wave', ex:'happy'});
+  bubbles.forEach(([e, x, y, dl], i) => {
+    const t = TIER[['src','src','src','src','act'][i]];
+    hero += `<g class="fl" style="animation-delay:${dl}s"><circle cx="${x}" cy="${y}" r="30" fill="${t.l}" stroke="${t.c}" stroke-width="4"/><text x="${x}" y="${y + 1}" text-anchor="middle" dominant-baseline="central" font-size="27">${e}</text></g>`;
+  });
+  hero += `</svg>`;
+  return `<div class="title-wrap">
+    ${hero}
+    <h1 class="big">나는 어떻게 만들어졌을까?</h1>
+    <p class="subtitle">사회화 경험 속에서 발견하는 나의 자아 정체성</p>
+    <button class="btn primary big" data-a="go" data-v="name">시작하기 ▶</button>
+    <p class="tiny">사회 ① · 사회화와 자아 정체성</p>
+  </div>`;
+};
+
+SCREENS.name = () => {
+  const has = S.name.trim().length > 0;
+  const tagged = S.tagged && has;
+  const state = tagged ? (S.justTagged ? 'drop' : 'on') : 'ghost';
+  const steps = S.justTagged ? 'idle,neutral,0;happy,happy,0.45' : '';
+  const pose = tagged ? 'happy' : 'idle', ex = tagged ? 'happy' : 'neutral';
+  const sfxAttr = S.justTagged ? 'data-sfx="pop@0.5"' : '';
+  S.justTagged = false;
+  return `<div class="namewrap">
+      <svg class="namesvg" viewBox="-110 -80 220 250" aria-label="이름표를 단 스틱맨" ${sfxAttr}>${charSVG({pose, ex, name:S.name, tagState:state, steps})}</svg>
+      <div class="nameform">
+        <h1 class="q">내 이름표를 달아 볼까요?</h1>
+        <p class="hint">이 스틱맨이 오늘 활동의 주인공, 바로 ‘나’예요.<br>이름을 쓰고 이름표를 달아 주세요.</p>
+        <input id="nameInput" maxlength="6" placeholder="이름 (6자 이내)" value="${esc(S.name)}" autocomplete="off">
+        <button class="btn soft" data-a="tag" ${has ? '' : 'disabled'}>🏷️ 이름표 달기</button>
+        ${tagged ? `<p class="cmsg good rise" style="animation-delay:.5s;margin-top:14px">반가워요, ${esc(S.name.trim())}! 이제 나를 만든 경험을 찾으러 가 볼까요?</p>` : ''}
+      </div>
+    </div>
+    ${nav(nextBtn('다음 →', 'go', 'now', tagged))}`;
+};
+
+SCREENS.now = () => {
+  const cat = NOW_CATS[S.nowTab];
+  const tabs = NOW_CATS.map((c, i) => `<button class="tab ${i === S.nowTab ? 'on' : ''}" data-a="tab" data-v="${i}">${c.name}</button>`).join('');
+  const chips = cat.items.map((it, i) => {
+    const id = `${S.nowTab}-${i}`;
+    const sel = S.now.some(x => x.id === id);
+    return `<button class="chip ${sel ? 'sel' : ''}" data-a="pickNow" data-v="${id}"><span class="em">${it[0]}</span>${it[1]}</button>`;
+  }).join('');
+  const tray = S.now.length
+    ? S.now.map(x => `<span class="tag">${x.emoji} ${esc(x.label)}<button data-a="rmNow" data-v="${x.id}" aria-label="빼기">✕</button></span>`).join('')
+    : '<span style="color:var(--sub)">아직 고른 것이 없어요.</span>';
+  return `${headRow(`<h1 class="q">지금의 나를 이루는 것들을 골라 보세요</h1>
+    <p class="hint">내가 좋아하는 것, 관심 있는 것, 잘하는 것, 중요하게 생각하는 것, 이루고 싶은 것 중 지금의 나를 잘 보여 주는 것을 <b>2~3개</b> 골라 보세요.</p>`,
+    guideHTML('idle', 'neutral', '지금의 나는 어떤 모습일까?'))}
+    <div class="tabs">${tabs}</div>
+    <div class="grid">${chips}</div>
+    <div class="custom"><input id="customInput" maxlength="10" placeholder="목록에 없으면 직접 쓰기 (10자 이내)" value="${esc(S.custom)}" autocomplete="off"><button class="btn soft small" data-a="addCustom">추가</button></div>
+    <div class="tray"><b>고른 것 ${S.now.length}/3</b>${tray}</div>
+    ${nav(nextBtn('다음 →', 'go', 'reveal', S.now.length >= 2))}`;
+};
+
+SCREENS.reveal = () => {
+  const pop = {}; S.now.forEach((x, i) => pop['now' + i] = .35 + i * .25);
+  return `<h1 class="q center">이것들은 지금의 나를 이루는 여러 모습이에요</h1>
+    ${sceneSVG(buildScene({upto:0}), {pop})}
+    <div class="box key center rise" style="font-size:22px;font-weight:800;animation-delay:1.1s">그런데 이런 모습들은 어떻게 생겨났을까요?</div>
+    ${nav(nextBtn('나를 만든 경험 찾아보기 🔍', 'go', 'exp', true))}`;
+};
+
+SCREENS.exp = () => {
+  const ch = curChain();
+  const prevDomains = S.chains.slice(0, S.cur).map(c => c.domain);
+  const prevCards = S.chains.slice(0, S.cur).map(c => `${c.domain}/${c.card}`);
+  const tiles = DOMAINS.map(d => `<button class="dom-tile ${ch.domain === d.id ? 'sel' : ''}" data-a="domain" data-v="${d.id}">
+      ${prevDomains.includes(d.id) ? '<span class="again">앞에서 골랐어요</span>' : ''}
+      <span class="e">${d.emoji}</span><span class="n">${d.name}</span><span class="d">${d.desc}</span></button>`).join('');
+  let cards = '';
+  const d = dom(ch);
+  if (d) {
+    cards = `<div class="sec-title">${d.emoji} ${d.name}에서 있었던 경험 중 하나를 골라요</div><div class="cards">` +
+      d.cards.map(c => {
+        const used = prevCards.includes(`${d.id}/${c.id}`);
+        return `<button class="x-card ${ch.card === c.id ? 'sel' : ''}" data-a="card" data-v="${c.id}" ${used ? 'disabled' : ''}><span class="e">${c.emoji}</span><span><span class="t">${c.title}</span><span class="d">${used ? '앞에서 고른 경험이에요' : c.desc}</span></span></button>`;
+      }).join('') + `</div>`;
+  }
+  const titles = ['나를 만든 경험을 하나 찾아볼까요?', '나를 만든 경험이 또 있을까요?', '마지막으로 경험을 하나 더 찾아볼까요?'];
+  return `${headRow(`<h1 class="q">${titles[S.cur]}</h1>
+    <p class="hint">사회화 기관을 선택한 다음 내가 겪었던 경험을 골라요.${S.cur === 0 ? '' : ' 같은 곳을 다시 골라도 괜찮아요.'}</p>`,
+    guideHTML('think', 'think', '이게 나에게 영향을 줬을까?'))}
+    <div class="domains">${tiles}</div>
+    ${cards}
+    ${nav(nextBtn('다음 →', 'go', nextAfterExp(ch), !!ch.card))}`;
+};
+
+SCREENS.situation = () => {
+  const ch = curChain(), c = card(ch), media = isMedia(ch);
+  const sent = c.tpl.map(p => {
+    if (typeof p === 'string') return esc(p);
+    const v = val(ch, p.s);
+    const sl = c.slots.find(s => s.key === p.s);
+    return v ? `<span class="blank">${esc(v)}</span>` : `<span class="blank empty">${sl.q.replace(/\?$/, '')}</span>`;
+  }).join('');
+  const groups = c.slots.map(sl => `<div class="slot"><h3>${sl.q}</h3><div class="row">` +
+    sl.opts.map((o, i) => `<button class="chip ${ch.v[sl.key] === i ? 'sel-y' : ''}" data-a="slot" data-v="${sl.key}|${i}">${esc(o)}</button>`).join('') +
+    `</div></div>`).join('');
+  return `${headRow(`${chainPills(ch, 1)}
+    <h1 class="q">어떤 경험이었을까요?</h1>
+    <p class="hint">아래에서 골라 빈칸을 채워 보세요. 똑같은 경험이 없다면 비슷한 내용을 고르세요.</p>`,
+    guideHTML('surprise', 'surprise', media ? '이런 모습이 인상 깊었구나!' : '다른 사람은 나를 이렇게 봤구나!'))}
+    <div class="sentence">${sent}</div>
+    ${groups}
+    ${nav(nextBtn('다음 →', 'go', 'mirror', slotsDone(ch)))}`;
+};
+
+/* 나의 생각·해석 — 경험 종류에 따라 다르게 보여 줌 */
+SCREENS.mirror = () => {
+  const ch = curChain(), kind = thoughtKind(ch), c = card(ch);
+  const opts = THOUGHTS[kind];
+  let left, title, rightLabel;
+  if (kind === 'mirror') {
+    title = '그 말을 듣고, 나는 나를 어떻게 생각했을까요?';
+    left = `<span class="label-dark">👥 다른 사람이 보는 나</span>
+      <div class="mirror"><div class="m-top">🪞</div><div>“${esc(val(ch, 'say'))}”</div><div class="m-who">${esc(whoShort(ch))}의 말</div></div>
+      <div class="cap">다른 사람의 반응은 나를 비추는 거울이 되기도 해요.</div>`;
+    rightLabel = '<span class="label-light">🪞 나는 어떻게 생각할까?</span>';
+  } else if (kind === 'media' && hasReact(ch)) {
+    title = '그 모습을 보고 어떤 생각이 들었나요?';
+    left = `<span class="label-dark">📺 인상 깊었던 모습</span>
+      <div class="screenbox"><div class="m-top">${c.emoji}</div><div>${esc(sceneShort(ch))}</div><div class="m-who">${esc(val(ch, 'content'))}에서</div></div>`;
+    rightLabel = '<span class="label-light">💭 나는 어떻게 생각할까?</span>';
+  } else {
+    title = isMedia(ch) ? '그 콘텐츠를 보고 어떤 생각이 들었나요?' : '이 경험을 하고 나서 어떤 생각이 들었나요?';
+    left = `<span class="pill yellow">내가 고른 경험</span>
+      <div class="expbox"><div class="m-top">${c.emoji}</div><div>${esc(c.title)}</div><div class="d">${esc(c.desc)}</div></div>`;
+    rightLabel = '<span class="label-light">💭 나는 어떻게 생각할까?</span>';
+  }
+  return `${headRow(`${chainPills(ch, 2)}
+    <h1 class="q">${title}</h1>
+    <p class="hint">정답은 없어요. 나와 가장 가까운 것을 골라요.</p>`,
+    guideHTML('tilt', 'tilt', '나는 어떻게 생각하지?'))}
+    <div class="mirror-wrap">
+      <div class="mirror-col">${left}</div>
+      <div class="opts">${rightLabel}${opts.map(o => `<button class="opt ${ch.thought === o.id ? 'sel' : ''}" data-a="thought" data-v="${o.id}">${esc(o.text)}</button>`).join('')}</div>
+    </div>
+    ${nav(nextBtn('다음 →', 'go', 'change', !!ch.thought))}`;
+};
+
+SCREENS.change = () => {
+  const ch = curChain();
+  const set = changeSet(ch);
+  const askMode = hasThought(ch) && ch.thought === 'doubt';
+  const chips = set.map(k => {
+    const o = CHANGES[k];
+    const selCls = ch.change === k ? (o.ask ? 'sel-a' : 'sel-g') : '';
+    return `<button class="chip ${selCls}" data-a="change" data-v="${k}"><span class="em">${o.emoji}</span>${o.text}</button>`;
+  }).join('');
+  return `${headRow(`${chainPills(ch, 3)}
+    <h1 class="q">${askMode ? '아직은 잘 모르겠어요' : '이 경험은 지금의 나에게 어떤 영향을 주었을까요?'}</h1>
+    ${askMode
+      ? `<div class="ask-note">그 경험이 나에게 어떤 영향을 주었는지 더 생각해 볼 수도 있어요. 모든 경험이 곧바로 나를 바꾸는 것은 아니에요.<br><b>다음에는 어떻게 해 볼까요?</b></div>`
+      : `<p class="hint">가장 가까운 것 하나를 골라요.</p>`}`,
+    askMode ? guideHTML('think', 'think', '천천히 생각해 봐도 괜찮아.') : guideHTML('happy', 'happy', '경험이 이어지고 있어!'))}
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${chips}</div>
+    ${nav(nextBtn('이 경험이 나에게 어떤 변화를 만들었는지 볼까요? →', 'go', 'domino', !!ch.change && set.includes(ch.change)))}`;
+};
+
+SCREENS.domino = () => {
+  const ch = curChain(), d = dom(ch), c = card(ch), t = thoughtOpt(ch), g = changeOpt(ch);
+  const tiles = [{t:'src', e:d.emoji, h:'사회화 환경', l:d.name}, {t:'act', e:c.emoji, h:'경험', l:c.title}];
+  if (hasReact(ch)) tiles.push({t:'rea', e:reactEmoji(ch), h:isMedia(ch) ? '인상 깊었던 모습' : '다른 사람의 반응', l:reactLabel(ch)});
+  if (hasThought(ch)) tiles.push({t:'mir', e:thoughtEmoji(ch), h:'나의 생각', l:t.short});
+  tiles.push({t:g.ask ? 'ask' : 'chg', e:g.emoji, h:g.ask ? '더 생각해 보기' : '나의 변화', l:g.label});
+  tiles.push({t:'now', e:'🧑', h:'결과', l:'현재의 나'});
+  const n = tiles.length, fall0 = .9, step = .34;
+  let row = '';
+  tiles.forEach((x, i) => {
+    const T = TIER[x.t];
+    if (i > 0) row += `<span class="darr" style="animation-delay:${(fall0 + i * step - .12).toFixed(2)}s">➜</span>`;
+    row += `<div class="dom run ${T.dash ? 'dash' : ''}" style="--g:${T.c}55;border-color:${T.c};background:${T.l};animation-delay:${(i * .12).toFixed(2)}s, ${(fall0 + i * step).toFixed(2)}s">
+      <span class="e">${x.e}</span><span class="t" style="color:${T.c === '#B9A3E3' ? '#8C73C8' : T.c}">${x.h}</span><span class="l">${esc(x.l)}</span></div>`;
+  });
+  const after = fall0 + (n - 1) * step + .6;
+  const clacks = tiles.map((x, i) => `clack@${(fall0 + i * step + .33).toFixed(2)}`).join(';');
+  const pop = {}; COLS_BY_DEPTH[ch.depth].forEach((col, i) => pop[`c${S.cur}n${col}`] = after + .35 + i * .14);
+  const msg = g.ask
+    ? '하나의 경험이 곧바로 나를 바꾸지 않을 수도 있어요. 더 생각해 보는 것도 나를 알아 가는 과정이에요.'
+    : '나는 새로운 경험을 통해 이렇게 변했어요!';
+  let next;
+  if (S.cur === 0) next = nav(nextBtn('다른 경험 찾아보기 →', 'moreYes', null, true));
+  else if (S.cur === 1) next = `<div class="more rise" style="animation-delay:${after + .6}s"><h3>경험을 하나 더 찾아볼까요?</h3>
+      <div class="btns"><button class="btn primary" data-a="moreYes">네, 하나 더 찾아볼래요.</button><button class="btn soft" data-a="moreNo">이제 충분해요.</button></div></div>${nav('')}`;
+  else next = `<p class="msg rise" style="animation-delay:${after + .6}s">그동안 내가 쌓은 경험들을 모두 연결해 볼까요?</p>${nav(nextBtn('나의 사회화 지도 보기 →', 'moreNo', null, true))}`;
+  return `<h1 class="q center">연쇄 반응이 일어났어요!</h1>
+    <div class="dominos" data-sfx="${clacks}">${row}</div>
+    <div class="after" style="animation-delay:${after.toFixed(2)}s">
+      <p class="msg">${msg}</p>
+      ${sceneSVG(buildScene({upto:S.cur + 1}), {pop,
+          steps:`${countPose(S.cur).join(',')},0;${g.ask ? 'think,think' : 'happy,happy'},${(after + .15).toFixed(2)};${countPose(S.cur + 1).join(',')},${(after + 1.5).toFixed(2)}`,
+          sfx:`ding@${(after - .35).toFixed(2)}`})}
+    </div>
+    ${next}`;
+};
+
+SCREENS.universe = () => {
+  const n = usedChains().length;
+  return `<h1 class="q">나의 사회화 지도</h1>
+  ${sceneSVG(buildScene({final:true}), {seq:ENTERING, sfx:ENTERING ? 'chime' : ''})}
+  <div class="detail" id="detail">👆 크게 보고 싶으면 동그라미를 눌러 보세요.</div>
+  ${legendHTML()}
+  ${nav(nextBtn('다음 →', 'go', 'q9', true))}`;
+};
+
+SCREENS.q9 = () => {
+  let body = '';
+  if (S.q9 === null) {
+    body = `<div class="yn"><button class="btn soft big" data-a="q9" data-v="yes">예</button><button class="btn soft big" data-a="q9" data-v="no">아니오</button></div>`;
+  } else if (S.q9 === 'yes') {
+    body = `<div class="box">정말 그럴까요? 🤔 나의 사회화 지도를 다시 한번 살펴보세요.<br>경험을 하나씩 거치면서 <b>생각과 행동이 달라진 부분</b>이 있었어요.</div>
+      <div style="margin-top:14px">${sceneSVG(buildScene({final:true}))}</div>
+      <div class="yn"><button class="btn soft" data-a="q9retry">다시 생각해 보기</button></div>`;
+  } else {
+    const list = usedChains().map(ch => {
+      const d = dom(ch), c = card(ch), g = changeOpt(ch);
+      return `<div class="fstep rise" style="margin-top:10px"><span class="pill blue">${d.emoji} ${d.name}</span> <b>${esc(c.title)}</b> → <span class="pill ${g.ask ? 'gray' : 'green'}">${g.emoji} ${esc(g.label)}</span></div>`;
+    }).join('');
+    body = `<div class="box key">맞아요! 지금의 나는 처음부터 이런 모습이 아니었어요.<br>그렇다면 <b>무엇이 나를 변화시켰을까요?</b> 나의 지도에서 찾아보면…</div>${list}`;
+  }
+  return `<h1 class="q center" style="margin-top:20px">지금의 나는 처음부터<br>이런 모습이었을까요?</h1>${body}
+    ${nav(nextBtn('다음 →', 'go', 'concept', S.q9 === 'no'))}`;
+};
+
+SCREENS.concept = () => {
+  const chs = usedChains();
+  const it = arr => arr.map(x => `<span class="it">${x}</span>`).join('');
+  const i1 = chs.map(ch => `${card(ch).emoji} ${esc(card(ch).title)}`);
+  const i2 = chs.filter(hasReact).map(ch => isMedia(ch) ? `${esc(val(ch, 'content'))}: ${esc(sceneShort(ch))}` : `${esc(whoShort(ch))}: “${esc(val(ch, 'say'))}”`);
+  const i3 = chs.filter(hasThought).map(ch => `${thoughtEmoji(ch)} ${esc(thoughtOpt(ch).short)}`);
+  const i4 = chs.map(ch => `${changeOpt(ch).emoji} ${esc(changeOpt(ch).text)}`);
+  const steps = [
+    {h:'① 내가 경험한 것', c:TIER.act.c, items:i1},
+    {h:'② 다른 사람의 반응·매체에서 본 것', c:TIER.rea.c, items:i2},
+    {h:'③ 나의 생각·해석', c:TIER.mir.c, items:i3},
+    {h:'④ 생각·행동·관심·가치의 변화', c:TIER.chg.c, items:i4},
+  ].filter(s => s.items.length);
+  const flow = steps.map(s => `<div class="fstep" style="border-color:${s.c}"><div class="h">${s.h}</div><div class="items">${it(s.items)}</div></div><div class="fdown">↓</div>`).join('')
+    + `<div class="fstep" style="border-color:${TIER.now.c}"><div class="h">🧑 현재의 나</div></div>`;
+  const mch = chs.find(isMirror);
+  const side = mch
+    ? `<div class="box">🪞 <b>거울 자아</b>: 다른 사람의 반응을 거울삼아 나를 바라보는 것.<br><span style="color:var(--sub)">나는 “${esc(thoughtOpt(mch).text)}”라고 생각했어요.</span></div>`
+    : `<div class="box">💭 같은 경험을 해도 <b>그것을 어떻게 받아들이는지</b>는 사람마다 달라요.</div>`;
+  return `<h1 class="q">나를 새롭게 변화시킨 과정은?</h1>
+    <div class="flow">${flow}</div>
+    <p class="hint" style="margin:18px 0 0">이처럼 나를 변화시킨 과정을 한 문장으로 정리해 볼까요?</p>
+    ${clozeHTML('concept')}
+    <div class="row2">
+      <div class="box">🏛️ <b>사회화 기관</b>: 가정, 학교, 또래 집단, 대중 매체처럼 사회화가 이루어지는 대표적인 곳이에요.</div>
+      ${side}
+    </div>
+    ${nav(nextBtn('다음 →', 'go', 'identity', clozeDone('concept')))}`;
+};
+
+SCREENS.identity = () => {
+  const chs = usedChains();
+  const it = arr => arr.map(x => `<span class="it">${x}</span>`).join('');
+  return `<h1 class="q">사회화 경험이 나에게 준 영향을 정리해요.</h1>
+    <div class="flow" style="margin-top:14px">
+      <div class="fstep" style="border-color:${TIER.src.c}"><div class="h">사회화 경험</div><div class="items">${it(chs.map(ch => `${dom(ch).emoji} ${dom(ch).name}`))}</div></div>
+      <div class="fdown">↓</div>
+      <div class="fstep" style="border-color:${TIER.act.c}"><div class="h">나만의 고유한 경험</div><div class="items">${it(chs.map(ch => esc(expText(ch))))}</div></div>
+      <div class="fdown">↓</div>
+      <div class="fstep" style="border-color:${TIER.chg.c}"><div class="h">나의 생각·가치관·관심</div><div class="items">${it(chs.map(ch => `${changeOpt(ch).emoji} ${esc(changeOpt(ch).label)}`).concat(S.now.map(x => `${x.emoji} ${esc(x.label)}`)))}</div></div>
+      <div class="fdown">↓</div>
+      <div class="fstep" style="border-color:${TIER.now.c}"><div class="h">🧑 나의 개성과 자아 정체성</div></div>
+    </div>
+    ${clozeHTML('identity')}
+    <div class="box think-q">💭 <b>생각하기</b>: 친구들의 사회화 지도는 나와 같은 모양일까요? 아니라면, 그 이유는 뭘까요?</div>
+    ${nav(nextBtn('다음 →', 'go', 'sentence', clozeDone('identity')))}`;
+};
+
+/* 나의 성찰 문장 (자동 완성 두 문장) */
+function sentA(){ const chs = usedChains(); const ch = chs[S.sent.a] || chs[0]; return ch ? card(ch).short : ''; }
+function sentenceLines(){
+  const A = sentA();
+  const B = S.sent.b != null ? SENT_B[S.sent.b] : '____';
+  const C = S.sent.c != null ? SENT_C[S.sent.c] : '____';
+  return [
+    `나는 ${A}${josa(A, '을', '를')} 통해 ${B}${S.sent.b != null ? josa(B, '을', '를') : '을(를)'} 느꼈습니다.`,
+    `그 경험은 내가 ${C} 사람이라고 생각하는 데 영향을 주었습니다.`,
+  ];
+}
+function mineLines(){ return S.mine.map(x => x.trim()).filter(Boolean); }
+
+/* =========================================================
+   참여 기록 보내기 — 반은 주소의 ?class=3 으로 구분
+   학생 화면에는 아무것도 뜨지 않고, 실패해도 앱 사용에 영향 없음
+   ========================================================= */
+let SESSION_ID = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const CLASS_TAG = (() => {
+  try {
+    const q = new URLSearchParams(location.search);
+    return String(q.get('class') || q.get('반') || '').replace(/[^0-9A-Za-z가-힣-]/g, '').slice(0, 10);
+  } catch (e) { return ''; }
+})();
+let LOGGED_NAME = null;
+function expSummary(ch){
+  const g = changeOpt(ch);
+  return `${dom(ch).name}-${card(ch).title} → ${g ? g.label : ''}`;
+}
+function sendLog(event){
+  if (!SHEET_URL) return;
+  const data = {sid:SESSION_ID, cls:CLASS_TAG, name:(S.name || '').trim(), event};
+  if (event === 'finish') {
+    data.exp = usedChains().map(expSummary);
+    data.sentence = sentenceLines().join(' ');
+    data.feel = mineLines().join(' ');
+  }
+  try {
+    fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)})
+      .catch(() => {});
+  } catch (e) { /* 기록 실패는 무시 */ }
+}
+
+SCREENS.sentence = () => {
+  const chs = usedChains();
+  const A = sentA();
+  const B = S.sent.b != null ? SENT_B[S.sent.b] : null, C = S.sent.c != null ? SENT_C[S.sent.c] : null;
+  const bl = (v, ph) => v ? `<span class="blank">${esc(v)}</span>` : `<span class="blank empty">${ph}</span>`;
+  const prev = `나는 ${bl(A, '')}${josa(A, '을', '를')} 통해 ${bl(B, '무엇')}${B ? josa(B, '을', '를') : '을(를)'} 느꼈습니다.<br>그 경험은 내가 ${bl(C, '어떤')} 사람이라고 생각하는 데 영향을 주었습니다.`;
+  const gA = chs.map((ch, i) => `<button class="chip ${S.sent.a === i ? 'sel-y' : ''}" data-a="sa" data-v="${i}">${card(ch).emoji} ${esc(card(ch).short)}</button>`).join('');
+  const gB = SENT_B.map((x, i) => `<button class="chip ${S.sent.b === i ? 'sel-y' : ''}" data-a="sb" data-v="${i}">${esc(x)}</button>`).join('');
+  const gC = SENT_C.map((x, i) => `<button class="chip ${S.sent.c === i ? 'sel-y' : ''}" data-a="sc" data-v="${i}">${esc(x)}</button>`).join('');
+  const mine = MINE_Q.map((q, i) => `<label for="mine${i}">${q}</label>
+      <textarea id="mine${i}" data-mine="${i}" maxlength="${MINE_MAX}" rows="3" placeholder="예: 내가 좋아하는 것들이 여러 경험 속에서 생겨났다는 걸 알게 되었다.">${esc(S.mine[i])}</textarea>
+      <div class="cnt" id="cnt${i}">${S.mine[i].length} / ${MINE_MAX}</div>`).join('');
+  return `<h1 class="q">📝 나의 사회화 성찰 카드</h1>
+    <p class="hint">아래쪽의 카드를 골라서 나를 가장 잘 표현하는 문장을 만들어 주세요. 똑같은 내용이 없다면 비슷한 내용을 고르세요.</p>
+    <div class="sent-prev">${prev}</div>
+    <div class="slot"><h3>① 어떤 경험을 통해?</h3><div class="row">${gA}</div></div>
+    <div class="slot"><h3>② 무엇을 느꼈나요?</h3><div class="row">${gB}</div></div>
+    <div class="slot"><h3>③ 나는 어떤 사람이라고 생각하게 되었나요?</h3><div class="row">${gC}</div></div>
+    <div class="mine"><h3>💬 오늘 활동을 마무리하며</h3>
+      <div style="color:var(--sub);font-size:15px">쓴 소감은 마지막 결과 화면과 저장 이미지에 함께 들어가요.</div>${mine}</div>
+    ${nav(nextBtn('나의 결과 보기 →', 'go', 'ending', S.sent.b != null && S.sent.c != null))}`;
+};
+
+SCREENS.ending = () => {
+  const L = sentenceLines(), M = mineLines();
+  const anim = ENTERING;
+  const fchips = FUTURE.map((f, i) => `<button class="fchip ${anim ? '' : 'static'} ${S.future === i ? 'sel' : ''}" data-a="future" data-v="${i}" ${anim ? `style="animation-delay:${(3.4 + i * .14).toFixed(2)}s"` : ''}>${f[0]} ${f[1]}</button>`).join('');
+  return `<h1 class="q center">나는 어떻게 만들어졌을까?</h1>
+    <p class="hint center">나의 사회화 지도 — 여러 경험과 상호작용이 모여 지금의 나를 이루고 있어요</p>
+    ${sceneSVG(buildScene({final:true}), {seq:anim, sfx:anim ? 'bell' : ''})}
+    <div class="detail" id="detail">👆 크게 보고 싶으면 동그라미를 눌러 보세요.</div>
+    ${legendHTML()}
+    <div class="ref-card ${anim ? 'rise' : ''}" style="animation-delay:2.6s">
+      <div class="h">📝 나의 사회화 성찰</div><p>${esc(L[0])}</p><p>${esc(L[1])}</p>
+      ${M.length ? `<div class="mine-h">💬 활동 소감</div>${M.map(x => `<p class="my">${esc(x)}</p>`).join('')}` : ''}
+    </div>
+    <div class="future-card ${anim ? 'rise' : ''}" style="animation-delay:3.1s">
+      <div class="h">🌱 사회화는 지금도 계속됩니다</div>
+      <div class="fwrap"><span class="s">🧑 현재의 나</span><span class="a">→</span><div class="fchips">${fchips}</div><span class="a">→</span><span class="s q">❓ 새로운 나?</span></div>
+      <div class="qq">앞으로의 경험은 나를 또 어떻게 변화시킬까요?</div>
+      <div class="core">자아 정체성은 사회화를 통해 형성되며, 계속되는 사회화 과정에 따라 변할 수도 있습니다.</div>
+    </div>
+    <div class="end-actions">
+      <button class="btn ghost" data-a="back">← 이전</button>
+      <button class="btn primary big" data-a="png">🖼️ 이미지(PNG)로 저장</button>
+      <button class="btn ghost" data-a="restart">${S.resetArm ? '정말 처음부터? 한 번 더 누르세요' : '처음부터 다시'}</button>
+    </div>`;
+};
+
+/* =========================================================
+   렌더링 & 이동
+   ========================================================= */
+function render(){
+  const enter = lastRendered !== S.screen;
+  lastRendered = S.screen;
+  ENTERING = enter;
+  NODE_MAP = {};
+  const body = (SCREENS[S.screen] || SCREENS.title)();
+  $('app').innerHTML = header() + `<main class="${enter ? 'enter' : ''}">${body}</main>`;
+  if (enter) window.scrollTo(0, 0);
+  // 방금 누른 선택지만 살짝 튀어 오르게
+  if (LAST_TAP && !enter) {
+    const el = document.querySelector(`[data-a="${LAST_TAP.a}"][data-v="${LAST_TAP.v}"]`);
+    if (el && /\bsel(-[a-z])?\b/.test(el.className)) el.classList.add('justsel');
+  }
+  LAST_TAP = null;
+  runSteps();
+}
+/* 자세·표정 순서 연출과 효과음 예약 */
+let TIMERS = [];
+function runSteps(){
+  TIMERS.forEach(clearTimeout); TIMERS = [];
+  document.querySelectorAll('[data-steps]').forEach(el => {
+    el.dataset.steps.split(';').filter(Boolean).forEach(part => {
+      const [p, e, t] = part.split(',');
+      const f = () => { el.setAttribute('data-pose', p); el.setAttribute('data-ex', e); };
+      if (+t <= 0) f(); else TIMERS.push(setTimeout(f, +t * 1000));
+    });
+  });
+  document.querySelectorAll('[data-sfx]').forEach(el => {
+    el.dataset.sfx.split(';').filter(Boolean).forEach(part => {
+      const [n, t] = part.split('@');
+      TIMERS.push(setTimeout(() => sfx(n), (+t || 0) * 1000));
+    });
+  });
+}
+
+/* =========================================================
+   효과음 — 파일 없이 브라우저에서 직접 만든 차임·종소리 (기본: 꺼짐)
+   ========================================================= */
+let AC = null;
+function audioCtx(){
+  if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; AC = new C(); }
+  if (AC.state === 'suspended') AC.resume();
+  return AC;
+}
+function tone(ac, f, t0, dur, vol){
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = 'sine'; o.frequency.value = f;
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g); g.connect(ac.destination);
+  o.start(t0); o.stop(t0 + dur + 0.05);
+}
+function bellNote(ac, f, t0, dur, vol){ tone(ac, f, t0, dur, vol); tone(ac, f * 2.01, t0, dur * .55, vol * .35); tone(ac, f * 3.02, t0, dur * .3, vol * .14); }
+/* 나무 블록이 부딪히는 짧은 '탁' 소리: 짧은 잡음 + 낮은 타격음 */
+let NOISE = null;
+function woodClack(ac, t, pitch){
+  if (!NOISE) {
+    NOISE = ac.createBuffer(1, Math.floor(ac.sampleRate * .1), ac.sampleRate);
+    const d = NOISE.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2.5);
+  }
+  // 나무 표면 부딪힘 (낮은 대역 잡음)
+  const src = ac.createBufferSource(); src.buffer = NOISE;
+  const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1100 * pitch; lp.Q.value = .8;
+  const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 650 * pitch; bp.Q.value = 1.4;
+  const g = ac.createGain(); g.gain.setValueAtTime(.9, t); g.gain.exponentialRampToValueAtTime(.001, t + .09);
+  src.connect(lp); lp.connect(bp); bp.connect(g); g.connect(ac.destination); src.start(t); src.stop(t + .11);
+  // 묵직한 몸통 울림 (낮은 음이 빠르게 떨어짐)
+  const o = ac.createOscillator(), og = ac.createGain();
+  o.type = 'sine'; o.frequency.setValueAtTime(190 * pitch, t); o.frequency.exponentialRampToValueAtTime(85 * pitch, t + .12);
+  og.gain.setValueAtTime(.45, t); og.gain.exponentialRampToValueAtTime(.001, t + .16);
+  o.connect(og); og.connect(ac.destination); o.start(t); o.stop(t + .18);
+  // 짧은 '톡' 윗소리 (나무 느낌)
+  const o2 = ac.createOscillator(), g2 = ac.createGain();
+  o2.type = 'triangle'; o2.frequency.setValueAtTime(420 * pitch, t); o2.frequency.exponentialRampToValueAtTime(240 * pitch, t + .04);
+  g2.gain.setValueAtTime(.16, t); g2.gain.exponentialRampToValueAtTime(.001, t + .05);
+  o2.connect(g2); g2.connect(ac.destination); o2.start(t); o2.stop(t + .07);
+}
+const SFX = {
+  clack:(ac, t) => { woodClack(ac, t, .92 + Math.random() * .16); },
+  pop:(ac, t) => { bellNote(ac, 1046.5, t, .35, .10); bellNote(ac, 1568, t + .08, .45, .08); },
+  ding:(ac, t) => { bellNote(ac, 1318.5, t, .8, .12); },
+  correct:(ac, t) => { bellNote(ac, 1046.5, t, .45, .10); bellNote(ac, 1568, t + .12, .8, .11); },
+  chime:(ac, t) => { [1046.5, 1318.5, 1568, 2093].forEach((f, i) => bellNote(ac, f, t + i * .14, 1.2, .09)); },
+  bell:(ac, t) => { [784, 1046.5, 1318.5, 1568].forEach((f, i) => bellNote(ac, f, t + i * .16, 1.4, .08)); bellNote(ac, 2093, t + .75, 2.4, .11); },
+};
+function sfx(name){
+  if (!S.sound || !SFX[name]) return;
+  try { const ac = audioCtx(); if (ac) SFX[name](ac, ac.currentTime + .02); } catch (e) { /* 소리 실패는 무시 */ }
+}
+function soundBtn(){ return `<button class="sndbtn ${S.sound ? 'on' : ''}" data-a="sound" aria-label="효과음 ${S.sound ? '끄기' : '켜기'}">${S.sound ? '🔊' : '🔇'}</button>`; }
+function go(screen){
+  S.hist.push({screen:S.screen, cur:S.cur});
+  S.screen = screen; S.resetArm = false;
+  render();
+}
+function back(){
+  const h = S.hist.pop();
+  if (!h) return;
+  S.screen = h.screen; S.cur = h.cur; S.resetArm = false;
+  render();
+}
+
+const ACTIONS = {
+  go: v => go(v),
+  tag: () => {
+    if (!S.name.trim()) { toast('이름을 먼저 써 주세요'); return; }
+    S.name = S.name.trim(); S.tagged = true; S.justTagged = true; render();
+    if (LOGGED_NAME !== S.name) { LOGGED_NAME = S.name; sendLog('start'); }
+  },
+  sound: (v, el) => {
+    S.sound = !S.sound;
+    if (S.sound) { audioCtx(); sfx('pop'); }
+    document.querySelectorAll('.sndbtn').forEach(b => { b.outerHTML = soundBtn(); });
+  },
+  back: () => back(),
+  tab: v => { S.nowTab = +v; render(); },
+  pickNow: v => {
+    const idx = S.now.findIndex(x => x.id === v);
+    if (idx >= 0) { S.now.splice(idx, 1); render(); return; }
+    if (S.now.length >= 3) { toast('최대 3개까지 고를 수 있어요'); return; }
+    const [ci, ii] = v.split('-').map(Number);
+    const it = NOW_CATS[ci].items[ii];
+    S.now.push({id:v, emoji:it[0], label:it[1]});
+    render();
+  },
+  addCustom: () => {
+    const inp = $('customInput');
+    const txt = (inp ? inp.value : S.custom).trim();
+    if (!txt) { toast('내용을 먼저 입력해 주세요'); return; }
+    if (S.now.length >= 3) { toast('최대 3개까지 고를 수 있어요'); return; }
+    if (S.now.some(x => x.label === txt)) { toast('이미 고른 것이에요'); return; }
+    S.now.push({id:'c' + Date.now(), emoji:'✏️', label:txt.slice(0, 10)});
+    S.custom = '';
+    render();
+  },
+  rmNow: v => { S.now = S.now.filter(x => x.id !== v); render(); },
+  domain: v => {
+    const ch = curChain();
+    if (ch.domain !== v) { S.chains[S.cur] = Object.assign(newChain(S.cur), {domain:v}); }
+    render();
+  },
+  card: v => {
+    const ch = curChain();
+    if (ch.card !== v) { ch.card = v; ch.v = {}; ch.thought = null; ch.change = null; }
+    render();
+  },
+  slot: v => { const [k, i] = v.split('|'); curChain().v[k] = +i; render(); },
+  thought: v => {
+    const ch = curChain(); ch.thought = v;
+    if (ch.change && !changeSet(ch).includes(ch.change)) ch.change = null;
+    render();
+  },
+  change: v => { curChain().change = v; render(); },
+  moreYes: () => {
+    S.hist.push({screen:S.screen, cur:S.cur});
+    S.cur += 1; S.screen = 'exp'; S.resetArm = false;
+    render();
+  },
+  moreNo: () => { S.used = S.cur + 1; go('universe'); },
+  node: (v, el) => {
+    const nd = NODE_MAP[v], box = $('detail');
+    if (!nd || !box) return;
+    const t = TIER[nd.tier];
+    box.style.borderLeftColor = t.c;
+    box.innerHTML = `<b style="color:${t.c === '#B9A3E3' ? '#8C73C8' : t.c}">${esc(nd.emoji)} ${t.name}</b><br>${esc(nd.detail)}`;
+    document.querySelectorAll('.nd.active').forEach(g => g.classList.remove('active'));
+    el.classList.add('active');
+  },
+  clozeWord: v => {
+    const [id, w] = v.split('|'); const c = clozeState(id);
+    if (clozeDone(id) || c.fill.includes(+w)) return;
+    const slot = c.fill.indexOf(null);
+    if (slot < 0) { toast('빈칸이 모두 찼어요. 칸을 눌러 단어를 빼 보세요'); return; }
+    c.fill[slot] = +w;
+    if (c.status === 'wrong') c.wrong[slot] = false;
+    render();
+  },
+  clozeBlank: v => {
+    const [id, i] = v.split('|'); const c = clozeState(id);
+    if (clozeDone(id) || c.fill[+i] == null) return;
+    c.fill[+i] = null; c.wrong[+i] = false;
+    render();
+  },
+  clozeCheck: v => { if (!clozeDone(v)) { clozeCheck(v); if (S.cloze[v].status === 'done') sfx('correct'); render(); } },
+  q9: v => { S.q9 = v; render(); },
+  q9retry: () => { S.q9 = null; render(); },
+  future: v => { S.future = S.future === +v ? null : +v; render(); },
+  sa: v => { S.sent.a = +v; render(); },
+  sb: v => { S.sent.b = +v; render(); },
+  sc: v => { S.sent.c = +v; render(); },
+  png: () => { savePNG(); sendLog('finish'); },
+  restart: () => {
+    if (!S.resetArm) { S.resetArm = true; render(); return; }
+    const snd = S.sound; S = initState(); S.sound = snd; SESSION_ID = Date.now().toString(36) + Math.random().toString(36).slice(2, 7); LOGGED_NAME = null; LAST_GUIDE = {pose:'idle', ex:'neutral'}; lastRendered = null; render();
+  },
+  closeModal: () => { $('modal').classList.add('hidden'); $('modal').innerHTML = ''; },
+  redownload: () => { if (savePNG.lastUrl) triggerDownload(savePNG.lastUrl); },
+};
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-a]');
+  if (!t || t.disabled) return;
+  const fn = ACTIONS[t.dataset.a];
+  if (!fn) return;
+  LAST_TAP = {a:t.dataset.a, v:t.dataset.v};
+  fn(t.dataset.v, t);
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'customInput') S.custom = e.target.value;
+  if (e.target.id === 'nameInput') {
+    S.name = e.target.value.slice(0, 6);
+    const nm = S.name.trim() || '이름', w = tagW(nm);
+    document.querySelectorAll('.namesvg .ntag-t').forEach(t => { t.textContent = nm; });
+    document.querySelectorAll('.namesvg .ntag-r').forEach(r => { r.setAttribute('width', w); r.setAttribute('x', -w / 2); });
+    const b = document.querySelector('[data-a="tag"]'); if (b) b.disabled = !S.name.trim();
+    const nx = document.querySelector('.navbar .btn.primary'); if (nx) nx.disabled = !(S.tagged && S.name.trim());
+  }
+  if (e.target.dataset && e.target.dataset.mine != null) {
+    const i = +e.target.dataset.mine;
+    S.mine[i] = e.target.value.slice(0, MINE_MAX);
+    const c = $('cnt' + i); if (c) c.textContent = `${S.mine[i].length} / ${MINE_MAX}`;
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.target.id === 'customInput' && e.key === 'Enter') { e.preventDefault(); ACTIONS.addCustom(); }
+  if (e.target.id === 'nameInput' && e.key === 'Enter') { e.preventDefault(); ACTIONS.tag(); }
+});
+
+/* =========================================================
+   PNG 저장 — 앱 상태에서 캔버스로 직접 그림
+   ========================================================= */
+function rr(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+}
+function wrapCanvas(ctx, text, maxW){
+  const words = text.split(' '), lines = [];
+  let line = '';
+  words.forEach(w => {
+    let t = line ? line + ' ' + w : w;
+    if (ctx.measureText(t).width > maxW && line) { lines.push(line); line = w; }
+    else line = t;
+    // 띄어쓰기 없이 긴 문장 대비: 글자 단위로 자르기
+    while (ctx.measureText(line).width > maxW) {
+      let k = line.length - 1;
+      while (k > 1 && ctx.measureText(line.slice(0, k)).width > maxW) k--;
+      lines.push(line.slice(0, k)); line = line.slice(k);
+    }
+  });
+  if (line) lines.push(line);
+  return lines;
+}
+function drawChar(ctx, cx, cy, poseName, exName, name){
+  const P = POSES[poseName] || POSES.idle;
+  const dir = a => [-Math.sin(a * Math.PI / 180), Math.cos(a * Math.PI / 180)];
+  ctx.save(); ctx.translate(cx, cy);
+  ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  const poly = pts => { ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); pts.slice(1).forEach(q => ctx.lineTo(q[0], q[1])); ctx.stroke(); };
+  const limb = (ox, oy, a1, l1, a2, l2) => {
+    const [x1, y1] = dir(a1), e = [ox + x1 * l1, oy + y1 * l1], pts = [[ox, oy], e];
+    if (l2) { const [x2, y2] = dir(a1 + a2); pts.push([e[0] + x2 * l2, e[1] + y2 * l2]); }
+    poly(pts);
+  };
+  limb(0, 100, P.ll, 54); limb(0, 100, P.rl, 54);
+  poly([[0, 30], [0, 100]]);
+  limb(0, 50, P.lu, 28, P.lf, 26); limb(0, 50, P.ru, 28, P.rf, 26);
+  if (name) {
+    const w = tagW(name);
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = '#EE8866'; ctx.lineWidth = 2.5;
+    rr(ctx, -w / 2, 63, w, 21, 6); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#C3624A'; ctx.font = `800 13px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText(name, 0, 78.5);
+    ctx.strokeStyle = INK; ctx.lineWidth = 5;
+  }
+  ctx.save(); ctx.translate(0, 32); ctx.rotate(P.h * Math.PI / 180); ctx.translate(0, -32);
+  ctx.fillStyle = '#FFE3C8'; ctx.beginPath(); ctx.arc(0, 0, 32, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  const stroke = (w, f) => { ctx.lineWidth = w; ctx.beginPath(); f(); ctx.stroke(); };
+  if (exName === 'joy' || exName === 'happy') {
+    stroke(3.5, () => { ctx.moveTo(-17, -19); ctx.quadraticCurveTo(-11, -25, -5, -20); ctx.moveTo(5, -20); ctx.quadraticCurveTo(11, -25, 17, -19); });
+    stroke(3.5, () => { ctx.moveTo(-16, -3); ctx.quadraticCurveTo(-11, -11, -6, -3); ctx.moveTo(6, -3); ctx.quadraticCurveTo(11, -11, 16, -3); });
+    ctx.fillStyle = 'rgba(244,163,163,.75)';
+    ctx.beginPath(); ctx.arc(-19, 8, 5, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(19, 8, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = INK; ctx.beginPath(); ctx.moveTo(-13, 6); ctx.quadraticCurveTo(0, 27, 13, 6); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#E98080'; ctx.beginPath(); ctx.moveTo(-6, 15); ctx.quadraticCurveTo(0, 20, 6, 15); ctx.closePath(); ctx.fill();
+  } else {
+    stroke(3.5, () => { ctx.moveTo(-17, -15); ctx.lineTo(-6, -16); ctx.moveTo(6, -16); ctx.lineTo(17, -15); });
+    ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(-11, -4, 3.8, 0, Math.PI * 2); ctx.arc(11, -4, 3.8, 0, Math.PI * 2); ctx.fill();
+    stroke(4, () => { ctx.moveTo(-10, 9); ctx.quadraticCurveTo(0, 17, 10, 9); });
+  }
+  ctx.restore();
+  if (exName === 'joy') {
+    ctx.font = `20px ${EMOJI_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#000';
+    SPARKS.forEach(([x, y]) => ctx.fillText('✨', x, y));
+  }
+  ctx.restore();
+}
+function drawNode(ctx, nd){
+  const t = TIER[nd.tier];
+  ctx.fillStyle = t.l; ctx.strokeStyle = t.c; ctx.lineWidth = 4; ctx.setLineDash(t.dash ? [7, 5] : []);
+  ctx.beginPath(); ctx.arc(nd.x, nd.y, 30, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
+  ctx.textAlign = 'center';
+  ctx.font = `27px ${EMOJI_FONT}`; ctx.textBaseline = 'middle'; ctx.fillStyle = '#000';
+  ctx.fillText(nd.emoji, nd.x, nd.y + 2);
+  ctx.font = `700 14px ${FONT}`; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#3D3229';
+  wrapLabel(nd.label, 7).forEach((ln, i) => ctx.fillText(ln, nd.x, nd.y + 49 + i * 17));
+}
+function drawScene(ctx, sc, ox, oy, k){
+  ctx.save(); ctx.translate(ox, oy); ctx.scale(k, k);
+  ctx.textAlign = 'center';
+  ctx.font = `800 15px ${FONT}`; ctx.textBaseline = 'alphabetic';
+  COL_HEAD.forEach((lines, i) => {
+    const c = TIER[COL_TIER[i]].c;
+    ctx.fillStyle = c === '#B9A3E3' ? '#8C73C8' : c;
+    lines.forEach((ln, j) => ctx.fillText(ln, COLX[i], lines.length === 1 ? 64 : 53 + j * 20));
+  });
+  ctx.strokeStyle = '#F0E8DB'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(30, 90); ctx.lineTo(585, 90); ctx.stroke();
+  sc.rows.forEach(r => {
+    ctx.fillStyle = '#F4EFE7'; ctx.beginPath(); ctx.arc(22, r.y, 13, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#7A6D61'; ctx.font = `800 14px ${FONT}`; ctx.textBaseline = 'middle'; ctx.fillText(String(r.k + 1), 22, r.y + 1);
+  });
+  sc.edges.forEach(e => {
+    ctx.strokeStyle = '#C9BEAF'; ctx.lineWidth = 3.5; ctx.setLineDash(e.dash ? [8, 7] : []);
+    ctx.beginPath(); ctx.moveTo(e.sx, e.sy); ctx.lineTo(e.ex, e.ey); ctx.stroke();
+    ctx.setLineDash([]);
+    if (e.arrow) {
+      const a = Math.atan2(e.ey - e.sy, e.ex - e.sx), L = 13;
+      ctx.fillStyle = '#B7AB9C'; ctx.beginPath();
+      ctx.moveTo(e.ex + Math.cos(a) * 3, e.ey + Math.sin(a) * 3);
+      ctx.lineTo(e.ex - Math.cos(a - .45) * L, e.ey - Math.sin(a - .45) * L);
+      ctx.lineTo(e.ex - Math.cos(a + .45) * L, e.ey - Math.sin(a + .45) * L);
+      ctx.closePath(); ctx.fill();
+    }
+  });
+  ctx.fillStyle = 'rgba(253,233,225,.8)'; ctx.beginPath(); ctx.arc(CHX, CHY + 68, 98, 0, Math.PI * 2); ctx.fill();
+  drawChar(ctx, CHX, CHY, sc.pose, sc.ex, (S.name || '').trim());
+  ctx.textAlign = 'center'; ctx.fillStyle = '#C3624A'; ctx.font = `800 19px ${FONT}`; ctx.textBaseline = 'alphabetic';
+  ctx.fillText('현재의 나', CHX, CHY + 184);
+  sc.nodes.forEach(nd => drawNode(ctx, nd));
+  sc.resNodes.forEach(nd => drawNode(ctx, nd));
+  ctx.restore();
+}
+function triggerDownload(url){
+  const a = document.createElement('a');
+  // 한글 파일명은 크롬에서 'download'(확장자 없음)로 바뀌므로 영문 파일명 사용
+  const d = new Date(), pad = n => String(n).padStart(2, '0');
+  a.href = url; a.download = `my-identity-map-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.png`;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function savePNG(){
+  const W = 1600, MAXH = 3200, M = 70, IW = W - M * 2;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = MAXH;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#FBF6EC'; ctx.fillRect(0, 0, W, MAXH);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = '#3D3229'; ctx.font = `800 60px ${FONT}`; ctx.fillText('나는 어떻게 만들어졌을까?', W / 2, 95);
+  ctx.fillStyle = '#7A6D61'; ctx.font = `600 28px ${FONT}`; ctx.fillText('나의 사회화 지도 — 여러 경험과 상호작용이 모여 지금의 나를 이루고 있어요', W / 2, 145);
+  // 지도
+  const k = IW / VW, mapH = VH * k;
+  let y = 180;
+  ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = '#E8DFD0'; ctx.lineWidth = 3;
+  rr(ctx, M, y, IW, mapH, 30); ctx.fill(); ctx.stroke();
+  drawScene(ctx, buildScene({final:true}), M, y, k);
+  y += mapH + 42;
+  // 범례
+  ctx.font = `600 22px ${FONT}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  const widths = LEGEND.map(key => 32 + ctx.measureText(TIER[key].name).width + 34);
+  let lx = (W - widths.reduce((a, b) => a + b, 0)) / 2;
+  LEGEND.forEach((key, i) => {
+    ctx.fillStyle = TIER[key].l; ctx.strokeStyle = TIER[key].c; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(lx + 10, y, 10, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#7A6D61'; ctx.fillText(TIER[key].name, lx + 30, y + 1);
+    lx += widths[i];
+  });
+  y += 40;
+  // 성찰 카드 (자동 문장 + 내가 쓴 문장)
+  ctx.font = `600 31px ${FONT}`;
+  const auto = []; sentenceLines().forEach(t => wrapCanvas(ctx, t, IW - 80).forEach(l => auto.push(l)));
+  ctx.font = `700 29px ${FONT}`;
+  const mine = []; mineLines().forEach(t => wrapCanvas(ctx, t, IW - 80).forEach(l => mine.push(l)));
+  let bh = 80 + auto.length * 46 + (mine.length ? 70 + mine.length * 44 : 0);
+  ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = '#EE8866'; ctx.lineWidth = 4;
+  rr(ctx, M, y, IW, bh, 26); ctx.fill(); ctx.stroke();
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = '#C3624A'; ctx.font = `800 25px ${FONT}`; ctx.fillText('📝 나의 사회화 성찰', M + 40, y + 44);
+  ctx.fillStyle = '#3D3229'; ctx.font = `600 31px ${FONT}`;
+  auto.forEach((ln, i) => ctx.fillText(ln, M + 40, y + 92 + i * 46));
+  if (mine.length) {
+    let my = y + 92 + auto.length * 46 - 10;
+    ctx.strokeStyle = '#E8DFD0'; ctx.lineWidth = 2; ctx.setLineDash([8, 6]);
+    ctx.beginPath(); ctx.moveTo(M + 40, my); ctx.lineTo(M + IW - 40, my); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = '#7A6D61'; ctx.font = `800 23px ${FONT}`; ctx.fillText('💬 활동 소감', M + 40, my + 38);
+    ctx.fillStyle = '#5B4636'; ctx.font = `700 29px ${FONT}`;
+    mine.forEach((ln, i) => ctx.fillText(ln, M + 40, my + 84 + i * 44));
+  }
+  y += bh + 30;
+  // 사회화는 지금도 계속됩니다
+  ctx.font = `700 23px ${FONT}`;
+  const chips = FUTURE.map((f, i) => ({t:`${f[0]} ${f[1]}`, sel:S.future === i}));
+  const cw = chips.map(c => ctx.measureText(c.t).width + 36);
+  const gap = 12, rowsC = [];
+  let cur = [], curW = 0;
+  chips.forEach((c, i) => {
+    if (cur.length && curW + gap + cw[i] > IW - 120) { rowsC.push({items:cur, w:curW}); cur = []; curW = 0; }
+    curW += (cur.length ? gap : 0) + cw[i]; cur.push(i);
+  });
+  if (cur.length) rowsC.push({items:cur, w:curW});
+  bh = 140 + rowsC.length * 58 + 90;
+  ctx.fillStyle = '#FAF7F2'; ctx.strokeStyle = '#A89C8E'; ctx.lineWidth = 3; ctx.setLineDash([12, 9]);
+  rr(ctx, M, y, IW, bh, 26); ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = '#3D3229'; ctx.font = `800 31px ${FONT}`; ctx.fillText('🌱 사회화는 지금도 계속됩니다', W / 2, y + 50);
+  ctx.fillStyle = '#7A6D61'; ctx.font = `700 24px ${FONT}`; ctx.fillText('🧑 현재의 나   →   앞으로의 경험   →   ❓ 새로운 나?', W / 2, y + 96);
+  let cy = y + 122;
+  ctx.font = `700 23px ${FONT}`;
+  rowsC.forEach(r => {
+    let cx = (W - r.w) / 2;
+    r.items.forEach(i => {
+      const c = chips[i];
+      ctx.fillStyle = c.sel ? '#FDE9E1' : '#FFFFFF'; ctx.strokeStyle = c.sel ? '#EE8866' : '#E8DFD0'; ctx.lineWidth = 3;
+      rr(ctx, cx, cy, cw[i], 46, 23); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#3D3229'; ctx.textBaseline = 'middle'; ctx.fillText(c.t, cx + cw[i] / 2, cy + 24);
+      cx += cw[i] + gap;
+    });
+    cy += 58;
+  });
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = '#7A6D61'; ctx.font = `700 24px ${FONT}`; ctx.fillText('앞으로의 경험은 나를 또 어떻게 변화시킬까요?', W / 2, cy + 22);
+  ctx.fillStyle = '#5B4636'; ctx.font = `800 24px ${FONT}`; ctx.fillText('자아 정체성은 사회화를 통해 형성되며, 계속되는 사회화 과정에 따라 변할 수도 있습니다.', W / 2, cy + 62);
+  y += bh + 30;
+  y += 20;
+
+  const out = document.createElement('canvas'); out.width = W; out.height = Math.ceil(y);
+  out.getContext('2d').drawImage(cv, 0, 0);
+  out.toBlob(blob => {
+    if (!blob) { toast('이미지를 만들지 못했어요. 다시 시도해 주세요.'); return; }
+    if (savePNG.lastUrl) URL.revokeObjectURL(savePNG.lastUrl);
+    const url = URL.createObjectURL(blob);
+    savePNG.lastUrl = url;
+    triggerDownload(url);
+    const m = $('modal');
+    m.innerHTML = `<div class="mbox">
+      <h2 style="margin:4px 0">🖼️ 이미지를 저장했어요</h2>
+      <p>크롬북의 <b>파일 앱 → 다운로드</b> 폴더에 저장되었어요.<br>패들렛에서 이 이미지를 올려 주세요.</p>
+      <img src="${url}" alt="나는 어떻게 만들어졌을까 결과 이미지">
+      <p style="color:var(--sub);font-size:15px">저장이 안 되었다면 ‘다시 저장’을 눌러 주세요.</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:10px">
+        <button class="btn soft" data-a="redownload">다시 저장</button>
+        <button class="btn primary" data-a="closeModal">닫기</button>
+      </div></div>`;
+    m.classList.remove('hidden');
+  }, 'image/png');
+}
+
+render();
+</script>
+</body>
+</html>
