@@ -1888,38 +1888,44 @@ const COMMENTS = {
 const ENDINGS = {
   high_low: {
     name: '학업을 지켰지만 운동에서 빈틈이 생긴 선택',
+    headline: '공부를 지키려 노력했지만 운동까지 챙기기는 쉽지 않았다',
     story: '기말고사와 수행평가는 꾸준히 챙겼지만, 특별 훈련에 거의 참여하지 못해 대회 후보 선수조차 되지 못했다. 도현 선배와 팀원들은 서운한 기색을 감추지 못했고, 감독님은 "아무리 공부가 중요해도 이건 너무하잖아?"라며 다소 화난 표정을 지었다.',
     message: '학업은 지켰지만, 그 대가로 야구부에서의 입지와 대회 출전 기회를 내려놓아야 했다. 학사 일정과 대회 일정이 겹치지 않았거나, 보충수업을 유연하게 대체할 수 있는 제도가 있었다면 이런 선택을 하지 않아도 됐을 것이다.',
   },
   low_high: {
     name: '운동을 지켰지만 학업에서 빈틈이 생긴 선택',
+    headline: '운동에 집중해 성과를 냈지만 공부까지 챙기기는 쉽지 않았다',
     story: '대회에서 좋은 활약을 보이며 팀에 기여했지만, 기말고사와 수행평가 성적은 크게 떨어졌다. 담임 선생님은 "학생 선수라고 해도 공부를 소홀히 해서는 안 되는데..."라며 걱정스러운 얼굴을 했다.',
     message: '운동에서는 분명한 성과를 냈지만, 성적 하락이라는 대가 없이는 불가능했다. 체육특기자를 위한 학습 보충 지원이나 평가 일정 조정 제도가 있었다면, 이 둘을 동시에 포기하지 않아도 됐을 것이다.',
   },
   mid_mid: {
     name: '둘 다 지키려 노력한 선택',
+    headline: '공부와 운동 둘 다 놓지 않으려 애썼지만 어느 쪽도 만족스럽지 않았다',
     story: '공부와 운동 양쪽 다 챙기려 애썼다. 그 결과 성적과 경기 기록은 좋지도, 나쁘지도 않게 나왔다. 담임 선생님과 감독님은 그 어느 쪽도 놓지 못하는 나를 보며 "네가 노력하는 점은 대견한데..."라며 말끝을 흐렸다.',
     message: '어느 쪽도 완벽하게 챙기지 못한 채 끝났지만, 이는 노력이 부족해서가 아니다. 애초에 한 사람이 혼자 감당하기엔 너무 많은 것이 동시에 겹쳐 있었다.',
   },
   mid_low: {
     name: '학업 쪽으로 기울었지만 운동에도 빈틈이 생긴 선택',
+    headline: '공부를 열심히 하면서 운동도 챙기려고 노력했으나 쉽지 않았다',
     story: '보충수업 쪽에 더 마음이 가 있었지만 성적이 크게 오르지도 않았고, 훈련이 부족해 대회 후보 선수조차 되지 못했다. 무엇을 위해 그렇게 애썼는지 스스로도 헷갈렸다.',
     message: '애쓴 방향은 분명했지만, 그 노력이 두 역할 중 어느 쪽에서도 충분히 인정받지 못했다. 혼자 애쓰는 것만으로는 한계가 있었다는 뜻이다.',
   },
   low_mid: {
     name: '운동 쪽으로 기울었지만 학업에도 빈틈이 생긴 선택',
+    headline: '운동을 열심히 하면서 공부도 챙기려고 노력했으나 쉽지 않았다',
     story: '훈련에 더 마음이 가 있었지만 대회에서도 애매한 활약에 그쳤고, 성적은 눈에 띄게 떨어졌다. 감독님도, 담임 선생님도 명확한 칭찬을 해주지 않았다.',
     message: '애쓴 방향은 분명했지만, 그 노력이 두 역할 중 어느 쪽에서도 충분히 인정받지 못했다. 혼자 애쓰는 것만으로는 한계가 있었다는 뜻이다.',
   },
   low_low: {
     name: '혼자 감당하기 어려웠던 선택',
+    headline: '두 역할을 모두 해내려 했지만 혼자 감당하기에는 너무 어려웠다',
     story: '양쪽 다 챙기려 했지만, 결국 기말고사·수행평가 성적도 크게 떨어지고 대회 후보 선수조차 되지 못했다. 담임 선생님도, 감독님도, 도현 선배도 아무 말 없이 안타까운 눈빛만 보냈다.',
     message: '이건 게을러서도, 노력이 부족해서도 아니다. 애초에 학사 일정과 대회 일정이 겹치지 않게 조정되었거나, 운동부 학생을 위한 학습 지원 제도가 있었다면 벌어지지 않았을 결과다. 개인의 의지만으로는 해결할 수 없는 역할 갈등도 있다는 것을, 이번 상황이 보여준다.',
   },
   // 설계상 나오지 않아야 하지만, 혹시 모를 경우를 대비한 안전망(fallback)
-  high_mid: { name: '아슬아슬하게 둘 다 챙긴 선택', story: '쉽지 않았지만, 양쪽 모두에서 최소한의 몫은 해냈다.', message: '하지만 언제까지나 이렇게 아슬아슬하게 버틸 수는 없다. 제도적인 뒷받침이 있었다면 이렇게까지 힘들이지 않아도 됐을 것이다.' },
-  mid_high: { name: '아슬아슬하게 둘 다 챙긴 선택', story: '쉽지 않았지만, 양쪽 모두에서 최소한의 몫은 해냈다.', message: '하지만 언제까지나 이렇게 아슬아슬하게 버틸 수는 없다. 제도적인 뒷받침이 있었다면 이렇게까지 힘들이지 않아도 됐을 것이다.' },
-  high_high: { name: '모두를 만족시킨 선택', story: '모두가 만족할 만한 결과를 냈다.', message: '하지만 이런 결과가 늘 가능한 것은 아니다. 제도적 뒷받침 없이는 유지되기 어려운 균형이라는 점을 기억해야 한다.' },
+  high_mid: { name: '아슬아슬하게 둘 다 챙긴 선택', headline: '아슬아슬하게 둘 다 챙겼지만 버티기는 쉽지 않았다', story: '쉽지 않았지만, 양쪽 모두에서 최소한의 몫은 해냈다.', message: '하지만 언제까지나 이렇게 아슬아슬하게 버틸 수는 없다. 제도적인 뒷받침이 있었다면 이렇게까지 힘들이지 않아도 됐을 것이다.' },
+  mid_high: { name: '아슬아슬하게 둘 다 챙긴 선택', headline: '아슬아슬하게 둘 다 챙겼지만 버티기는 쉽지 않았다', story: '쉽지 않았지만, 양쪽 모두에서 최소한의 몫은 해냈다.', message: '하지만 언제까지나 이렇게 아슬아슬하게 버틸 수는 없다. 제도적인 뒷받침이 있었다면 이렇게까지 힘들이지 않아도 됐을 것이다.' },
+  high_high: { name: '모두를 만족시킨 선택', headline: '공부와 운동 모두 만족스러운 결과를 냈다', story: '모두가 만족할 만한 결과를 냈다.', message: '하지만 이런 결과가 늘 가능한 것은 아니다. 제도적 뒷받침 없이는 유지되기 어려운 균형이라는 점을 기억해야 한다.' },
 };
 
 /* =========================================================
@@ -2134,9 +2140,6 @@ function renderEnding(){
 
   main.innerHTML = `
     <div class="ending-screen">
-      <div style="text-align:center;">
-        <span class="role-tag">${ending.name}</span>
-      </div>
       ${imageTag(`ending_${academicTier}_${athleticTier}`, ending.name)}
       <p class="sub" style="margin-top:6px;">${state.studentInfo.classNo}반 ${state.studentInfo.name} · ${state.studentInfo.groupName}</p>
 
@@ -2181,14 +2184,15 @@ function renderEnding(){
       </div>
 
       <div style="margin:16px 0; padding:16px 18px; background:#f4f6fb; border:1px solid #dde3f0; border-radius:14px;">
+        <p style="margin:0 0 8px; font-family:var(--font-gothic); font-size:17px; font-weight:800; line-height:1.5; color:#1B2A5C;">${escapeHtml(ending.headline)}</p>
         <p style="margin:0; font-family:var(--font-gothic); font-size:15.5px; line-height:1.6; color:var(--text);">${escapeHtml(ending.story)}</p>
       </div>
 
       <div class="reflect-block">
         <h3>✍️ 오늘 나의 선택에 대해 이야기해 볼까요?</h3>
-        <div class="reflect-q">내가 이 역할을 선택한 이유는 무엇인가요?</div>
+        <div class="reflect-q">우리 모둠이 이런 선택을 한 이유는 무엇일까요?</div>
         <textarea id="reflect1" placeholder="이유를 자유롭게 적어보세요."></textarea>
-        <div class="reflect-q">이 상황을 나 혼자의 힘으로 다 해결하기 어려웠다면, 학교나 사회는 어떤 도움을 줄 수 있을까요? <span style="font-weight:400; font-size:13px; color:#999;">(최대 2개 선택)</span></div>
+        <div class="reflect-q">이 상황을 개인의 힘으로 해결하기 어려웠다면, 학교나 사회는 어떤 도움을 줄 수 있을까요? <span style="font-weight:400; font-size:13px; color:#999;">(최대 2개 선택)</span></div>
         <div id="institution-cards" style="display:flex; flex-direction:column; gap:10px; margin:10px 0 6px;"></div>
         <textarea id="reflect2-etc" placeholder="기타 의견을 자유롭게 적어보세요." style="display:none;"></textarea>
         <div id="institution-summary" style="display:none; margin-top:10px; padding:12px 14px; background:#fff8f3; border:1px solid #f0ddd0; border-radius:12px; font-family:var(--font-gothic); font-size:14.5px; line-height:1.6; color:var(--text);"></div>
@@ -2338,20 +2342,7 @@ function drawEndingCanvas3(imgEl, data){
     y = 28;
   }
 
-  // 역할(엔딩) 태그 pill
-  ctx.font = '700 15px ' + PNG_FONT;
-  const tagText = ending.name;
-  const tagW = ctx.measureText(tagText).width + 28;
-  const tagH = 30;
-  const tagX = (W - tagW) / 2;
-  ctx.fillStyle = '#D98F5C';
-  roundRectPath(ctx, tagX, y, tagW, tagH, 15);
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
   ctx.textAlign = 'center';
-  ctx.fillText(tagText, W/2, y + 20);
-  y += tagH + 22;
-
   ctx.fillStyle = '#888888';
   ctx.font = '400 17px ' + PNG_FONT;
   ctx.fillText(`${state.studentInfo.classNo}반 / ${state.studentInfo.name} / 모둠이름: ${state.studentInfo.groupName}`, W/2, y);
@@ -2491,14 +2482,22 @@ function drawEndingCanvas3(imgEl, data){
   });
 
   // 이야기(서사) 박스
+  ctx.font = '800 17px ' + PNG_FONT;
+  const headLines = wrapTextLines(ctx, ending.headline, contentW - 40);
+  const headBlockH = headLines.length*25 + 6;
   ctx.font = '400 15px ' + PNG_FONT;
   const storyLines = wrapTextLines(ctx, ending.story, contentW - 40);
-  const storyH = 16 + storyLines.length*22 + 14;
+  const storyH = 16 + headBlockH + storyLines.length*22 + 14;
   ctx.fillStyle = '#f4f6fb';
   roundRectPath(ctx, PAD, y, contentW, storyH, 10);
   ctx.fill();
+  ctx.fillStyle = '#1B2A5C';
+  ctx.font = '800 17px ' + PNG_FONT;
+  let sy = y + 16 + 17;
+  headLines.forEach(line => { ctx.fillText(line, PAD+18, sy); sy += 25; });
+  sy += 6 - 2;
   ctx.fillStyle = '#333333';
-  let sy = y + 16 + 16;
+  ctx.font = '400 15px ' + PNG_FONT;
   storyLines.forEach(line => { ctx.fillText(line, PAD+18, sy); sy += 22; });
   y += storyH + 22;
 
@@ -2506,7 +2505,7 @@ function drawEndingCanvas3(imgEl, data){
   if(reflect1){
     ctx.font = '700 14px ' + PNG_FONT;
     ctx.fillStyle = '#C97840';
-    ctx.fillText('✍️ 내가 이 역할을 선택한 이유', PAD, y + 18);
+    ctx.fillText('✍️ 우리 모둠이 이런 선택을 한 이유', PAD, y + 18);
     y += 30;
 
     ctx.font = '400 15px ' + PNG_FONT;
